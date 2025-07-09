@@ -1,11 +1,12 @@
 <template>
   <div class="item-center w-1/3 m-auto mt-10 shadow-2xl rounded-lg p-10">
-    <div class="w-5/6 m-auto space-y-4">
-      <fwb-Input label="Name" input-class="input-style" placeholder="Enter Your Name" />
-      <fwb-Input label="Email" input-class="input-style" placeholder="Enter Your Email" />
+    <form @submit.prevent="submitForm">
+      <div class="w-5/6 m-auto space-y-4">
+      <fwb-Input label="Name" input-class="input-style" placeholder="Enter Your Name" v-model="formData.name"/>
+      <fwb-Input label="Email" input-class="input-style" placeholder="Enter Your Email" v-model="formData.email"/>
       <div>
         <label class="text-sm font-semibold">Class</label><br />
-        <select class="select-style">
+        <select class="select-style" v-model="formData.classId">
           <option selected disabled>Select One</option>
           <option v-for="(value, key) in classes" :key="key">
             {{ value.name }}
@@ -14,14 +15,14 @@
       </div>
       <div>
         <label class="text-sm font-semibold">Section</label><br />
-        <select class="select-style">
+        <select class="select-style" v-model="formData.sectionId">
           <option selected disabled>Select One</option>
           <option v-for="(value, key) in sections" :key="key">
             {{ value.name }}
           </option>
         </select>
       </div>
-      <fwb-Input type="number" label="Roll No." input-class="input-style" placeholder="Enter Your Roll No" />
+      <fwb-Input type="number" label="Roll No." input-class="input-style" placeholder="Enter Your Roll No" v-model="formData.rollNo" />
       <div>
         <label class="text-sm font-semibold">Photo</label>
         <div class="flex items-center justify-center w-full">
@@ -47,24 +48,84 @@
           </label>
         </div>
       </div>
-      <fwb-button gradient="cyan-blue" class="w-full">Create Account</fwb-button>
+      <fwb-button gradient="cyan-blue" class="w-full" type="submit">Create Account</fwb-button>
     </div>
+    </form>
   </div>
 </template>
 
 <script setup>
+import axios from "axios";
 import { FwbSelect, FwbInput, FwbFileInput, FwbButton } from "flowbite-vue";
+import { ref, onMounted } from "vue";
 
-const classes = [
-  { value: "1", name: "One" },
-  { value: "2", name: "Two" },
-  { value: "3", name: "Three" },
-];
-const sections = [
-  { value: "1", name: "Orange" },
-  { value: "2", name: "Grape" },
-  { value: "3", name: "Watermelon" },
-];
+const classUrl = import.meta.env.VITE_CLASS_URL;
+const sectionUrl = import.meta.env.VITE_SECTION_URL;
+const studentUrl = import.meta.env.VITE_STUDENT_URL;
+
+const classes = ref([]);
+const sections = ref([]);
+
+const name = ref('')
+const email = ref('')
+const classId = ref('')
+const sectionId = ref('')
+const rollNo = ref('')
+
+const formData = ref({
+  name: "",
+  email: "",
+  classId: "",
+  sectionId: "",
+  rollNo: ""
+});
+
+const fileB64 = ref(null)
+
+const submitForm = async () => {
+  const form = new FormData();
+  form.append("name", formData.value.name);
+  form.append("email", formData.value.email);
+  form.append("classId", formData.value.classId);
+  form.append("sectionId", formData.value.sectionId);
+  form.append("rollNo", formData.value.rollNo);
+  form.append("imageBase64", fileB64.value);
+
+  console.log(formData.value);
+  
+
+  // axios.post(studentUrl + '/saveData', form).then(response => {
+  //   console.log("Account created successfully:", response.data);
+  //   // Reset the form or redirect as needed
+  // }).catch(error => {
+  //   console.error("Error creating account:", error);
+  // });
+
+  try {
+    const response = await axios.post(studentUrl + '/saveData', form, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+    // alert('Saved successfully!')
+    console.log(response.data)
+  } catch (err) {
+    console.error('Error saving data:', err)
+  }
+};
+
+onMounted(() => {
+  axios.get(classUrl + '/getAllData').then(response => {
+    classes.value = response.data;
+  }).catch(error => {
+    console.log("Error fetching classes:", error);
+  })
+  axios.get(sectionUrl + '/getAllData').then(response => {
+    sections.value = response.data;
+  }).catch(error => {
+    console.log("Error fetching sections: ", error);
+  })
+})
 
 function showImage() {
   const fileInput = document.getElementById("dropzone-file");
@@ -77,6 +138,7 @@ function showImage() {
       svgDiv.classList.add("hidden");
       imagePreview.classList.remove("hidden");
       imagePreview.src = e.target.result;
+      fileB64.value = e.target.result;
     };
     reader.readAsDataURL(file);
   }

@@ -19,7 +19,11 @@
           <label class="text-sm font-semibold">Class</label><br />
           <select class="select-style" v-model="formData.classId">
             <option selected disabled>Select One</option>
-            <option v-for="(value, key) in classes" :key="key" :value=value.id>
+            <option
+              v-for="(value, key) in classes"
+              :key="key"
+              :value="value.id"
+            >
               {{ value.name }}
             </option>
           </select>
@@ -28,7 +32,11 @@
           <label class="text-sm font-semibold">Section</label><br />
           <select class="select-style" v-model="formData.sectionId">
             <option selected disabled>Select One</option>
-            <option v-for="(value, key) in sections" :key="key" :value=value.id>
+            <option
+              v-for="(value, key) in sections"
+              :key="key"
+              :value="value.id"
+            >
               {{ value.name }}
             </option>
           </select>
@@ -103,6 +111,8 @@
 import axios from "axios";
 import { FwbSelect, FwbInput, FwbFileInput, FwbButton } from "flowbite-vue";
 import { ref, onMounted } from "vue";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 
 const classUrl = import.meta.env.VITE_CLASS_URL;
 const sectionUrl = import.meta.env.VITE_SECTION_URL;
@@ -128,31 +138,6 @@ const formData = ref({
 
 const fileB64 = ref(null);
 
-// const submitForm = async () => {
-//   const form = new FormData();
-//   form.append("name", formData.value.name);
-//   form.append("email", formData.value.email);
-//   form.append("classId", formData.value.classId);
-//   form.append("sectionId", formData.value.sectionId);
-//   form.append("rollNo", formData.value.rollNo);
-//   form.append("imageBase64", fileB64.value);
-
-//   console.log(fileB64.value);
-
-//   try {
-//     const response = await axios.post(studentUrl + "/saveData", form, {
-//       headers: {
-//         "Content-Type": "multipart/form-data",
-//       },
-//     });
-//     alert("Saved successfully!");
-//     console.log(response.data);
-//   } catch (err) {
-//     console.error("Error saving data:", err);
-//   }
-// };
-
-
 const submitForm = async () => {
   try {
     const payload = {
@@ -162,22 +147,22 @@ const submitForm = async () => {
       classId: formData.value.classId,
       sectionId: formData.value.sectionId,
       rollNo: formData.value.rollNo,
-      imageBase64: fileB64.value, // raw base64 string only
+      imageBase64: fileB64.value,
     };
-
-    console.log("Payload to be sent:", payload);
-
     const response = await axios.post(studentUrl + "/saveData", payload, {
       headers: {
         "Content-Type": "application/json",
       },
     });
-    console.log(response.data);
+    if (response.data.mCode === 1111) {
+      toast.success(response.data.message);
+    } else {
+      toast.error(response.data.message);
+    }
   } catch (err) {
     console.error("Error saving data:", err);
   }
 };
-
 
 onMounted(() => {
   axios
@@ -209,7 +194,7 @@ function showImage() {
       svgDiv.classList.add("hidden");
       imagePreview.classList.remove("hidden");
       imagePreview.src = e.target.result;
-      fileB64.value = e.target.result.split(',')[1];
+      fileB64.value = e.target.result.split(",")[1];
     };
     reader.readAsDataURL(file);
   }

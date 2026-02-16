@@ -88,7 +88,7 @@
               >
                 <img
                   id="image-preview"
-                  class="hidden w-4/5 h-4/5 object-cover rounded-md"
+                  class="hidden w-32 h-32 object-cover rounded-md"
                 />
               </div>
               <input
@@ -202,5 +202,3 @@ function showImage() {
   }
 }
 </script>
-
-<style></style>

@@ -1,11 +1,10 @@
 <script setup>
-import Signup from './views/security/register.vue';
 </script>
 
 <template>
   <main>
   </main>
-  <signup />
+   <router-view />
 </template>
 
 <style scoped>

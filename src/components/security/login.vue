@@ -30,7 +30,7 @@
                 id="username"
                 v-model="formData.username"
                 type="username"
-                placeholder="you@example.com"
+                placeholder="TestUser"
                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition placeholder-gray-400"
                 :class="{ 'border-red-500 focus:ring-red-200': errors.username }"
               />
@@ -215,15 +215,16 @@ export default {
             }),
           }
         );
-
+        
         const jsonResponse = await response.json();
 
         if (response.ok) {
           this.successMessage = "Login successful! Redirecting to dashboard...";
           
           // Store token if provided
-          if (jsonResponse.token) {
-            localStorage.setItem("authToken", jsonResponse.token);
+          if (jsonResponse.jwtToken) {
+            localStorage.setItem("authToken", jsonResponse.jwtToken);
+            localStorage.setItem("username", this.formData.username);
           }
 
           // Store remember me preference

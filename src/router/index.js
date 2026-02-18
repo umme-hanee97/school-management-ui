@@ -8,6 +8,7 @@ const routes = [
   { path: '/register', name: 'Register', component: Register },
   { path: '/dashboard', name: 'Dashboard', component: () => import('@/views/dashboard.vue') }
   ,{ path: '/profile', name: 'Profile', component: () => import('@/views/profile.vue') }
+  ,{ path: '/profile/edit', name: 'ProfileEdit', component: () => import('@/views/profile-edit.vue') }
 ];
 
 const router = createRouter({

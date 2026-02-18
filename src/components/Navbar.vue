@@ -13,8 +13,9 @@
           </div>
         </div>
 
-        <div class="hidden sm:ml-6 sm:flex sm:items-center">
-          <router-link to="/security/login" class="text-sm text-gray-600 hover:text-gray-900">Sign in</router-link>
+        <div class="hidden sm:ml-6 sm:flex sm:items-center space-x-4">
+          <span class="text-sm text-gray-700">Hi, {{ username || 'User' }}</span>
+          <button @click="logout" class="text-sm text-gray-600 hover:text-gray-900">Sign out</button>
         </div>
 
         <div class="-mr-2 flex items-center sm:hidden">
@@ -36,7 +37,7 @@
         <router-link to="/dashboard" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-700 hover:bg-gray-50 hover:border-indigo-500" active-class="bg-indigo-50 border-indigo-500 text-indigo-700">Dashboard</router-link>
         <router-link to="/student/list-student" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-700 hover:bg-gray-50 hover:border-indigo-500" active-class="bg-indigo-50 border-indigo-500 text-indigo-700">Students</router-link>
         <router-link to="/profile" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-700 hover:bg-gray-50 hover:border-indigo-500" active-class="bg-indigo-50 border-indigo-500 text-indigo-700">Profile</router-link>
-        <router-link to="/security/login" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-700 hover:bg-gray-50 hover:border-indigo-500" active-class="bg-indigo-50 border-indigo-500 text-indigo-700">Sign in</router-link>
+        <button @click="logout" class="w-full text-left block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-700 hover:bg-gray-50 hover:border-indigo-500">Sign out</button>
       </div>
     </div>
   </nav>
@@ -44,7 +45,18 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+
 const open = ref(false)
+const router = useRouter()
+
+const username = localStorage.getItem('rememberUsername') || localStorage.getItem('username') || ''
+
+const logout = () => {
+  localStorage.removeItem('authToken')
+  // optional: keep rememberUsername, but you can remove it if desired
+  router.push('/login')
+}
 </script>
 
 <style scoped>

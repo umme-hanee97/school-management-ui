@@ -1,33 +1,39 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 import Navbar from './components/Navbar.vue'
 
-const isLoggedIn = ref(false)
+const isLoggedIn = ref(!!localStorage.getItem('authToken'))
 const router = useRouter()
 
 const handleLogin = () => {
   const token = localStorage.getItem('authToken')
-  console.log('Checking login status, token:', token)
-  if (token) {
-    isLoggedIn.value = true
+  isLoggedIn.value = !!token
+}
+
+const handleStorageEvent = (event) => {
+  if (event.key === 'authToken') {
+    handleLogin()
   }
 }
 
 onMounted(() => {
   handleLogin()
-  console.log('Is logged in:', isLoggedIn.value)
+  window.addEventListener('storage', handleStorageEvent)
+  // update when route changes (e.g., after login redirect)
+  router.afterEach(() => {
+    handleLogin()
+  })
 })
 
-// Watch for route changes to update login status
-router.afterEach(() => {
-  handleLogin()
+onBeforeUnmount(() => {
+  window.removeEventListener('storage', handleStorageEvent)
 })
 </script>
 
 <template>
   <div class="min-h-screen bg-gray-50">
-    <Navbar v-show="isLoggedIn" />
+    <Navbar v-if="isLoggedIn" />
     <main class="py-6 px-4">
       <router-view />
     </main>

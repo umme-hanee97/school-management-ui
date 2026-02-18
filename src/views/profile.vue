@@ -29,13 +29,22 @@ export default {
   name: 'ProfileView',
   components: { ProfileCard },
   data() {
+    const defaultUser = {
+      name: 'John Doe',
+      email: 'john.doe@example.com',
+      phone: '+1 555 123 4567',
+      role: 'Administrator'
+    }
+
+    let stored = null
+    try {
+      stored = JSON.parse(localStorage.getItem('userProfile'))
+    } catch (e) {
+      stored = null
+    }
+
     return {
-      user: {
-        name: 'John Doe',
-        email: 'john.doe@example.com',
-        phone: '+1 555 123 4567',
-        role: 'Administrator'
-      }
+      user: stored || defaultUser
     }
   }
 }

@@ -1,5 +1,7 @@
 # school-management-ui
 
+### Live demo: https://school-management-ui-hbxz.onrender.com
+
 This template should help get you started developing with Vue 3 in Vite.
 
 ## Recommended IDE Setup

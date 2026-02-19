@@ -8,7 +8,8 @@
       <router-link to="/students" class="block px-3 py-2 rounded hover:bg-indigo-50 text-gray-700">Students</router-link>
       <router-link to="/teachers" class="block px-3 py-2 rounded hover:bg-indigo-50 text-gray-700">Teachers</router-link>
       <router-link to="/classes" class="block px-3 py-2 rounded hover:bg-indigo-50 text-gray-700">Classes</router-link>
-      <router-link to="/profile" class="block px-3 py-2 rounded hover:bg-indigo-50 text-gray-700">Profile</router-link>
+      <!-- <router-link to="/profile" class="block px-3 py-2 rounded hover:bg-indigo-50 text-gray-700">Profile</router-link> -->
+      <router-link :to="{ name: 'Profile', params: { username: username } }" class="block px-3 py-2 rounded hover:bg-indigo-50 text-gray-700">Profile</router-link>
       <router-link to="/settings" class="block px-3 py-2 rounded hover:bg-indigo-50 text-gray-700">Settings</router-link>
     </nav>
   </aside>
@@ -17,6 +18,11 @@
 <script>
 export default {
   name: 'Sidebar',
+  data() {
+    return {
+      username: localStorage.getItem('rememberUsername') || localStorage.getItem('username') || ''
+    }
+  }
 };
 </script>
 

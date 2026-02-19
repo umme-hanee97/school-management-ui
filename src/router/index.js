@@ -7,8 +7,8 @@ const routes = [
   { path: '/login', name: 'Login', component: Login },
   { path: '/register', name: 'Register', component: Register },
   { path: '/dashboard', name: 'Dashboard', component: () => import('@/views/dashboard.vue'), meta: { requiresAuth: true } }
-  ,{ path: '/profile', name: 'Profile', component: () => import('@/views/profile.vue'), meta: { requiresAuth: true } }
-  ,{ path: '/profile/edit', name: 'ProfileEdit', component: () => import('@/views/profile-edit.vue'), meta: { requiresAuth: true } }
+  ,{ path: '/profile/:username?', name: 'Profile', component: () => import('@/views/profile.vue'), meta: { requiresAuth: true } }
+  ,{ path: '/profile/edit/:username?', name: 'ProfileEdit', component: () => import('@/views/profile-edit.vue'), meta: { requiresAuth: true } }
 ];
 
 const router = createRouter({

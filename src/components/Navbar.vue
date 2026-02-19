@@ -54,6 +54,7 @@ const username = localStorage.getItem('rememberUsername') || localStorage.getIte
 
 const logout = () => {
   localStorage.removeItem('authToken')
+  localStorage.removeItem('rememberUsername')
   // optional: keep rememberUsername, but you can remove it if desired
   router.push('/login')
 }

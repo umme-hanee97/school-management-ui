@@ -34,6 +34,8 @@
 </template>
 
 <script>
+import { profileService, handleApiError } from '@/services';
+
 export default {
   name: 'ProfileEdit',
   data() {
@@ -41,89 +43,77 @@ export default {
       form: {
         name: '',
         email: '',
-        role: ''
+        role: '',
+        phone: '',
       },
       message: '',
       messageClass: 'text-sm text-green-600',
+      isLoading: false,
     }
   },
   created() {
     this.loadProfile()
   },
   methods: {
-    apiBase() {
-      return import.meta.env.VITE_API_BASE || ''
-    },
     async loadProfile() {
-      const username = localStorage.getItem('username')
-      const authToken = localStorage.getItem('authToken')
-      if (!username) {
-        // fallback to stored profile
-        const stored = localStorage.getItem('userProfile')
-        if (stored) {
-          try { this.form = JSON.parse(stored) } catch (e) {}
-        }
-        return
-      }
       try {
-        const res = await fetch(`${this.apiBase()}/api/users/${encodeURIComponent(username)}`, {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': localStorage.getItem('authToken') ? `Bearer ${localStorage.getItem('authToken')}` : ''
-          }
-        })
-        if (!res.ok) throw new Error('Failed to load')
-        const data = await res.json()
+        const { data } = await profileService.getCurrentProfile();
         this.form = {
           name: data.name || data.fullName || '',
           email: data.email || '',
-          role: data.role || ''
-        }
-      } catch (e) {
-        // fallback to stored profile
-        const stored = localStorage.getItem('userProfile')
-        if (stored) {
-          try { this.form = JSON.parse(stored) } catch (err) {}
-        }
+          role: data.role || '',
+          phone: data.phone || '',
+        };
+      } catch (error) {
+        const errorInfo = handleApiError(error);
+        this.loadFallbackProfile();
       }
     },
+
+    loadFallbackProfile() {
+      try {
+        const stored = localStorage.getItem('userProfile');
+        if (stored) {
+          this.form = JSON.parse(stored);
+        }
+      } catch (e) {
+        // Ignore errors
+      }
+    },
+
     async saveProfile() {
       if (!this.form.name || !this.form.email) {
-        this.message = 'Name and email are required.'
-        this.messageClass = 'text-sm text-red-600'
-        return
+        this.message = 'Name and email are required.';
+        this.messageClass = 'text-sm text-red-600';
+        return;
       }
 
-      const username = localStorage.getItem('username') || this.form.email
+      this.isLoading = true;
+
       try {
-        const res = await fetch(`${this.apiBase()}/api/users/${encodeURIComponent(username)}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': localStorage.getItem('authToken') ? `Bearer ${localStorage.getItem('authToken')}` : ''
-          },
-          body: JSON.stringify(this.form)
-        })
-
-        if (!res.ok) {
-          const err = await res.text()
-          this.message = `Save failed: ${err}`
-          this.messageClass = 'text-sm text-red-600'
-          return
-        }
-
-        const saved = await res.json().catch(() => ({}))
-        localStorage.setItem('userProfile', JSON.stringify(this.form))
-        this.message = 'Profile saved.'
-        this.messageClass = 'text-sm text-green-600'
-        this.$router.push('/profile')
-      } catch (e) {
-        this.message = 'Unable to save profile.'
-        this.messageClass = 'text-sm text-red-600'
+        await profileService.updateProfile(this.form);
+        
+        // Cache profile locally
+        localStorage.setItem('userProfile', JSON.stringify(this.form));
+        
+        this.message = 'Profile saved successfully!';
+        this.messageClass = 'text-sm text-green-600';
+        
+        // Redirect after 1.5 seconds
+        setTimeout(() => {
+          this.$router.push('/profile');
+        }, 1500);
+      } catch (error) {
+        const errorInfo = handleApiError(error);
+        this.message = errorInfo.message || 'Failed to save profile.';
+        this.messageClass = 'text-sm text-red-600';
+      } finally {
+        this.isLoading = false;
       }
     },
+
     cancel() {
-      this.$router.back()
+      this.$router.back();
     }
   }
 }

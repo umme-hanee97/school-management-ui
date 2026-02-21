@@ -33,6 +33,7 @@
 
 <script>
 import ProfileCard from "@/components/profile/ProfileCard.vue";
+import { profileService, handleApiError } from "@/services";
 
 export default {
   name: "ProfileView",
@@ -56,71 +57,60 @@ export default {
     this.loadProfile();
   },
   methods: {
-    apiBase() {
-      return import.meta.env.VITE_API_BASE || "";
-    },
     async loadProfile() {
       this.loading = true;
       this.error = "";
-      const username = localStorage.getItem("username");
-      if (!username) {
-        // fallback to localStorage userProfile
-        try {
-          const stored = JSON.parse(localStorage.getItem("userProfile"));
-          this.user = stored;
-        } catch (e) {
-          this.user = {
-            name: "John Doe",
-            email: "john.doe@example.com",
-            phone: "+1 555 123 4567",
-            role: "Administrator",
-          };
-        }
-        this.loading = false;
-        return;
-      }
-      debugger;
+
       try {
-        const token = localStorage.getItem("authToken");
-        console.log("Token:", token); // Check if token exists
-        console.log("Token length:", token?.length); // Check if it's not empty
-        // const res = await fetch(`http://localhost:8080/api/v1/users/username/${encodeURIComponent(this.username || localStorage.getItem('username'))}`,
-        const res = await fetch(
-          `http://localhost:8080/api/v1/users/username/test`,
-          {
-            headers: {
-              Accept: "application/json",
-              Authorization: localStorage.getItem("authToken")
-                ? `Bearer ${token}`
-                : "",
-            },
-            method: "GET",
-          }
-        );
-        if (!res.ok) throw new Error("Failed to load");
-        const data = await res.json();
-        this.user = {
-          name: data.name || data.fullName || "",
-          email: data.email || "",
-          phone: data.phone || "",
-          role: data.role || "",
-        };
-      } catch (e) {
-        // fallback to localStorage userProfile
-        try {
-          const stored = JSON.parse(localStorage.getItem("userProfile"));
-          this.user = stored;
-        } catch (err) {
-          this.user = {
-            name: "John Doe",
-            email: "john.doe@example.com",
-            phone: "+1 555 123 4567",
-            role: "Administrator",
-          };
+        const username = this.username || localStorage.getItem("username");
+        
+        if (!username) {
+          // If no username, try to load current user profile
+          const { data } = await profileService.getCurrentProfile();
+          this.mapProfileData(data);
+        } else {
+          // Load specific user profile
+          const { data } = await profileService.getProfile(username);
+          this.mapProfileData(data);
         }
-        this.error = "Could not load profile from server.";
+      } catch (error) {
+        const errorInfo = handleApiError(error);
+        this.error = errorInfo.message;
+        
+        // Fallback to localStorage or default data
+        this.loadFallbackProfile();
+      } finally {
+        this.loading = false;
       }
-      this.loading = false;
+    },
+
+    mapProfileData(data) {
+      this.user = {
+        name: data.name || data.fullName || "",
+        email: data.email || "",
+        phone: data.phone || "",
+        role: data.role || "",
+      };
+    },
+
+    loadFallbackProfile() {
+      try {
+        const stored = JSON.parse(localStorage.getItem("userProfile"));
+        if (stored) {
+          this.user = stored;
+          return;
+        }
+      } catch (e) {
+        // Ignore parsing errors
+      }
+
+      // Default fallback data
+      this.user = {
+        name: "User",
+        email: localStorage.getItem("username") || "user@example.com",
+        phone: "",
+        role: "User",
+      };
     },
   },
 };

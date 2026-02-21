@@ -154,6 +154,8 @@
 </template>
 
 <script>
+import { authService, handleApiError } from '@/services';
+
 export default {
   name: "Login",
   data() {
@@ -204,47 +206,31 @@ export default {
       this.isLoading = true;
 
       try {
-        const response = await fetch(
-          "http://localhost:8080/api/v1/auth/signin",
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              username: this.formData.username,
-              password: this.formData.password,
-            }),
-          }
+        const { data } = await authService.signin(
+          this.formData.username,
+          this.formData.password
         );
+
+        this.successMessage = "Login successful! Redirecting to dashboard...";
         
-        const jsonResponse = await response.json();
-
-        if (response.ok) {
-          this.successMessage = "Login successful! Redirecting to dashboard...";
-          
-          // Store token if provided
-          if (jsonResponse.jwtToken) {
-            localStorage.setItem("authToken", jsonResponse.jwtToken);
-            localStorage.setItem("username", this.formData.username);
-          }
-
-          // Store remember me preference
-          if (this.formData.rememberMe) {
-            localStorage.setItem("rememberUsername", this.formData.username);
-          }
-
-          // Redirect to dashboard after 1.5 seconds
-          setTimeout(() => {
-            this.$router.push("/dashboard");
-          }, 1500);
-        } else {
-          this.errors.global =
-            jsonResponse.message ||
-            "Login failed. Please check your credentials and try again.";
+        // Store token if provided
+        if (data.jwtToken) {
+          localStorage.setItem("authToken", data.jwtToken);
+          localStorage.setItem("username", this.formData.username);
         }
+
+        // Store remember me preference
+        if (this.formData.rememberMe) {
+          localStorage.setItem("rememberUsername", this.formData.username);
+        }
+
+        // Redirect to dashboard after 1.5 seconds
+        setTimeout(() => {
+          this.$router.push("/dashboard");
+        }, 1500);
       } catch (error) {
-        this.errors.global =
-          error.message ||
-          "An error occurred during login. Please try again.";
+        const errorInfo = handleApiError(error);
+        this.errors.global = errorInfo.message;
       } finally {
         this.isLoading = false;
       }

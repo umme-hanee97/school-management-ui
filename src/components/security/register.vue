@@ -119,7 +119,10 @@
 </template>
 
 <script>
+import { authService, handleApiError } from '@/services';
+
 export default {
+  services: { authService, handleApiError },
   name: 'Register',
   data() {
     return {
@@ -213,24 +216,16 @@ export default {
       if (!this.validateForm()) return;
       this.isLoading = true;
       try {
-        const res = await fetch('http://localhost:8080/api/v1/auth/signup', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            name: this.formData.name,
-            email: this.formData.email,
-            password: this.formData.password,
-          }),
+        await this.$options.services.authService.register({
+          name: this.formData.name,
+          email: this.formData.email,
+          password: this.formData.password,
         });
-        const json = await res.json();
-        if (res.ok) {
-          this.successMessage = 'Registration successful! Redirecting to login...';
-          setTimeout(() => this.$router.push('/login'), 1500);
-        } else {
-          this.errors.global = json.message || 'Registration failed. Please try again.';
-        }
-      } catch (err) {
-        this.errors.global = err.message || 'An error occurred during registration.';
+        this.successMessage = 'Registration successful! Redirecting to login...';
+        setTimeout(() => this.$router.push('/login'), 1500);
+      } catch (error) {
+        const errorInfo = this.$options.services.handleApiError(error);
+        this.errors.global = errorInfo.message || 'Registration failed. Please try again.';
       } finally {
         this.isLoading = false;
       }

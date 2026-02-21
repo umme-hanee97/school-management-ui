@@ -8,7 +8,7 @@ const routes = [
   { path: '/register', name: 'Register', component: Register },
   { path: '/dashboard', name: 'Dashboard', component: () => import('@/views/dashboard.vue'), meta: { requiresAuth: true } }
   ,{ path: '/profile/:username?', name: 'Profile', component: () => import('@/views/profile.vue'), meta: { requiresAuth: true } }
-  ,{ path: '/profile/edit/:username?', name: 'ProfileEdit', component: () => import('@/views/profile-edit.vue'), meta: { requiresAuth: true } }
+  ,{ path: '/profile/edit/:username?', name: 'ProfileEdit', props: true, component: () => import('@/views/profile-edit.vue'), meta: { requiresAuth: true } }
 ];
 
 const router = createRouter({

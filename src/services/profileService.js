@@ -42,6 +42,10 @@ export const profileService = {
     });
   },
 
+  getAllRoles() {
+    return api.get('/roles');
+  },
+
   /**
    * Change password
    * @param {string} currentPassword

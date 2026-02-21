@@ -47,7 +47,7 @@ export default {
         name: "",
         email: "",
         phone: "",
-        role: "",
+        roles: "",
       },
       loading: true,
       error: "",
@@ -89,7 +89,7 @@ export default {
         name: data.name || data.fullName || "",
         email: data.email || "",
         phone: data.phone || "",
-        role: data.role || "",
+        roles: data.roles || "",
       };
     },
 
@@ -109,7 +109,7 @@ export default {
         name: "User",
         email: localStorage.getItem("username") || "user@example.com",
         phone: "",
-        role: "User",
+        roles: "User",
       };
     },
   },

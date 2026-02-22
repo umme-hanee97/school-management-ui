@@ -30,7 +30,11 @@
         <div>
           <label class="block text-sm font-medium text-gray-700">Role</label>
           <div class="mt-1 space-y-2">
-            <div v-for="role in roles" :key="role" class="flex items-center">
+            <div
+              v-for="role in roles"
+              :key="role.name"
+              class="flex items-center"
+            >
               <input
                 type="checkbox"
                 :id="role.name"
@@ -38,7 +42,6 @@
                 v-model="form.roles"
                 class="mr-2 h-4 w-4 text-indigo-600 rounded"
               />
-
               <label :for="role.name" class="text-sm text-gray-700">
                 {{ role.name.charAt(0) + role.name.slice(1).toLowerCase() }}
               </label>
@@ -84,7 +87,7 @@ export default {
       message: "",
       messageClass: "text-sm text-green-600",
       isLoading: false,
-      roles: [],
+      roles: []
     };
   },
   props: {
@@ -100,6 +103,7 @@ export default {
         this.form = {
           name: data.name || data.fullName || "",
           email: data.email || "",
+          roles: data.roles || [],
         };
       } catch (error) {
         const errorInfo = handleApiError(error);
@@ -119,6 +123,7 @@ export default {
     },
 
     async saveProfile() {
+      debugger
       if (!this.form.name || !this.form.email) {
         this.message = "Name and email are required.";
         this.messageClass = "text-sm text-red-600";
@@ -128,9 +133,10 @@ export default {
       this.isLoading = true;
 
       try {
-        await profileService.updateProfile(this.form);
+        const response = await profileService.updateProfile(this.form.name, this.form);
 
-        // Cache profile locally
+        if (response.status === 200) {
+          // Cache profile locally
         localStorage.setItem("userProfile", JSON.stringify(this.form));
 
         this.message = "Profile saved successfully!";
@@ -140,6 +146,11 @@ export default {
         setTimeout(() => {
           this.$router.push("/profile");
         }, 1500);
+        } else {
+          this.message = "Error saving profile: " + (response.message || "Unknown error");
+        this.messageClass = "text-sm text-red-600";
+        }
+        
       } catch (error) {
         const errorInfo = handleApiError(error);
         this.message = errorInfo.message || "Failed to save profile.";

@@ -23,8 +23,8 @@ export const profileService = {
    * @param {Object} profileData - { firstName, lastName, email, phone, etc }
    * @returns {Promise}
    */
-  updateProfile(profileData) {
-    return api.put('/profile', profileData);
+  updateProfile(username, profileData) {
+    return api.put(`/users/${username}`, profileData);
   },
 
   /**

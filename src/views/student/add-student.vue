@@ -25,7 +25,7 @@
               :key="key"
               :value="value.id"
             >
-              {{ value.name }}
+              {{ value.className }}
             </option>
           </select>
         </div>
@@ -38,7 +38,7 @@
               :key="key"
               :value="value.id"
             >
-              {{ value.name }}
+              {{ value.sectionName }}
             </option>
           </select>
         </div>
@@ -167,9 +167,10 @@ export default {
     async loadClasses() {
       try {
         // Using studentService - adjust endpoint if needed
-        const { data } = await studentService.getStudents({ page: 1, pageSize: 1000 });
+        const { data } = await studentService.getClasses();
         // This is a placeholder - adjust based on actual API structure
-        return [];
+        this.classes = data || [];
+        return this.classes;
       } catch (error) {
         console.error("Error loading classes:", error);
         return [];
@@ -182,7 +183,9 @@ export default {
     async loadSections() {
       try {
         // This is a placeholder - adjust based on actual API structure
-        return [];
+        const { data } = await studentService.getSections();
+        this.sections = data || [];
+        return this.sections;
       } catch (error) {
         console.error("Error loading sections:", error);
         return [];

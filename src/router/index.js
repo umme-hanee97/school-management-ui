@@ -9,6 +9,8 @@ const routes = [
   { path: '/dashboard', name: 'Dashboard', component: () => import('@/views/dashboard.vue'), meta: { requiresAuth: true } }
   ,{ path: '/profile/:username?', name: 'Profile', component: () => import('@/views/profile.vue'), meta: { requiresAuth: true } }
   ,{ path: '/profile/edit/:username?', name: 'ProfileEdit', props: true, component: () => import('@/views/profile-edit.vue'), meta: { requiresAuth: true } }
+  ,{ path: '/add-student', name: 'AddStudent', component: () => import('@/views/student/add-student.vue'), meta: { requiresAuth: true } }
+  ,{ path: '/add-teacher', name: 'AddTeacher', component: () => import('@/views/teacher/add-teacher.vue'), meta: { requiresAuth: true } }
 ];
 
 const router = createRouter({

@@ -57,6 +57,14 @@ export const studentService = {
   bulkDeleteStudents(studentIds) {
     return api.post('/students/bulk-delete', { ids: studentIds });
   },
+
+  getClasses(){
+    return api.get('/lookup/classes');
+  },
+
+  getSections(){
+    return api.get('/lookup/sections');
+  }
 };
 
 export default studentService;

@@ -16,7 +16,7 @@
   </span></p>
     </div>
     <div class="mt-6 flex gap-2">
-    <router-link :to="{ name: 'ProfileEdit', params: { username: user.name } }" class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">Edit Profile</router-link>
+    <router-link :to="editProfileRoute" class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">Edit Profile</router-link>
       <button class="px-4 py-2 border rounded text-gray-700 hover:bg-gray-50">Change Password</button>
     </div>
   </div>
@@ -29,7 +29,7 @@ export default {
     user: { type: Object, required: true },
   },
   computed: {
-    initials() {      
+    initials() {            
       const name = (this.user && this.user.name) || '';
       if (name) {
         return name.split(' ').map(s => s[0]).slice(0,2).join('').toUpperCase();
@@ -44,7 +44,25 @@ export default {
       return 'User'
     }
     return this.user.roles.filter(r => r !== 'USER').map(r => r.charAt(0) + r.slice(1).toLowerCase()).join(', ')
-  }
+  },
+
+    editProfileRoute() {
+      if (!this.user?.roles) {
+        return { name: 'ProfileEdit', params: { username: this.user.name } };
+      }
+
+      const roles = this.user.roles.map(r => r.toLowerCase());
+
+      if (roles.includes('student')) {
+        return { name: 'AddStudent' };
+      }
+
+      if (roles.includes('teacher')) {
+        return { name: 'AddTeacher' };
+      }
+
+      return { name: 'ProfileEdit', params: { username: this.user.name } };
+    }
   }
 }
 </script>

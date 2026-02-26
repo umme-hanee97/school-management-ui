@@ -1,67 +1,204 @@
 <template>
-  <div class="item-center w-1/3 m-auto mt-10 shadow-2xl rounded-lg p-10">
-    <form @submit.prevent="submitForm">
-        <h1 class="text-2xl place-self-center">Register</h1>
-      <input type="text" v-model="formData.id" class="hidden" />
-      <div class="w-5/6 m-auto space-y-4">
-        <fwb-Input
-          label="Name"
-          input-class="input-style"
-          placeholder="Enter Your Name"
-          v-model="formData.name"
-        />
-        <fwb-Input
-          label="Email"
-          input-class="input-style"
-          placeholder="Enter Your Email"
-          v-model="formData.email"
-        />
-        <div>
-          <label class="text-sm font-semibold">Class</label><br />
-          <select class="select-style" v-model="formData.classId">
-            <option selected disabled>Select One</option>
-            <option
-              v-for="(value, key) in classes"
-              :key="key"
-              :value="value.id"
-            >
-              {{ value.className }}
-            </option>
-          </select>
+  <div class="min-h-screen bg-gray-50 py-10 px-4">
+    <div class="max-w-5xl mx-auto bg-white shadow-2xl rounded-lg p-8">
+      <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">Add New Student</h1>
+        <p class="text-gray-600">Fill in all the required information below</p>
+      </div>
+
+      <form @submit.prevent="submitForm" class="space-y-8">
+        <input type="text" v-model="formData.id" class="hidden" />
+
+        <!-- Personal Information Section -->
+        <div class="border-b pb-6">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">Personal Information</h2>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Student Name *</label>
+              <input
+                type="text"
+                v-model="formData.name"
+                placeholder="Enter student name"
+                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                required
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Father's Name</label>
+              <input
+                type="text"
+                v-model="formData.fatherName"
+                placeholder="Enter father's name"
+                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Mother's Name</label>
+              <input
+                type="text"
+                v-model="formData.motherName"
+                placeholder="Enter mother's name"
+                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+          </div>
         </div>
-        <div>
-          <label class="text-sm font-semibold">Section</label><br />
-          <select class="select-style" v-model="formData.sectionId">
-            <option selected disabled>Select One</option>
-            <option
-              v-for="(value, key) in sections"
-              :key="key"
-              :value="value.id"
-            >
-              {{ value.sectionName }}
-            </option>
-          </select>
+
+        <!-- Contact Information Section -->
+        <div class="border-b pb-6">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">Contact Information</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Email Address *</label>
+              <input
+                type="email"
+                v-model="formData.email"
+                placeholder="Enter email address"
+                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                required
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Contact Number</label>
+              <input
+                type="tel"
+                v-model="formData.contactNo"
+                placeholder="Enter contact number"
+                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+          </div>
+          <div class="mt-6">
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Address</label>
+            <textarea
+              v-model="formData.address"
+              placeholder="Enter full address"
+              rows="3"
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            ></textarea>
+          </div>
         </div>
-        <fwb-Input
-          type="number"
-          label="Roll No."
-          input-class="input-style"
-          placeholder="Enter Your Roll No"
-          v-model="formData.rollNo"
-        />
-        <div>
-          <label class="text-sm font-semibold">Photo</label>
+
+        <!-- Academic Information Section -->
+        <div class="border-b pb-6">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">Academic Information</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Class *</label>
+              <select
+                v-model="formData.classId"
+                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                required
+              >
+                <option value="" disabled>Select a class</option>
+                <option
+                  v-for="(value, key) in classes"
+                  :key="key"
+                  :value="value.id"
+                >
+                  {{ value.className }}
+                </option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Section *</label>
+              <select
+                v-model="formData.sectionId"
+                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                required
+              >
+                <option value="" disabled>Select a section</option>
+                <option
+                  v-for="(value, key) in sections"
+                  :key="key"
+                  :value="value.id"
+                >
+                  {{ value.sectionName }}
+                </option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Roll Number *</label>
+              <input
+                type="number"
+                v-model="formData.rollNo"
+                placeholder="Enter roll number"
+                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                required
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Teacher</label>
+              <select
+                v-model="formData.teacherId"
+                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="" disabled>Select a teacher</option>
+                <option
+                  v-for="(value, key) in teachers"
+                  :key="key"
+                  :value="value.id"
+                >
+                  {{ value.teacherName }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Date of Birth Section -->
+        <div class="border-b pb-6">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">Date of Birth</h2>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Date of Birth</label>
+            <input
+              type="date"
+              v-model="formData.dateOfBirth"
+              class="w-full md:w-1/3 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+          </div>
+        </div>
+
+        <!-- Subjects Section -->
+        <div class="border-b pb-6">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">Subjects</h2>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div
+              v-for="subject in subjects"
+              :key="subject.id"
+              class="flex items-center"
+            >
+              <input
+                type="checkbox"
+                :id="'subject-' + subject.id"
+                :value="subject.id"
+                v-model="formData.selectedSubjects"
+                class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
+              />
+              <label
+                :for="'subject-' + subject.id"
+                class="ml-2 text-sm font-medium text-gray-700 cursor-pointer"
+              >
+                {{ subject.subjectName }}
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Profile Picture Section -->
+        <div class="border-b pb-6">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">Profile Picture</h2>
           <div class="flex items-center justify-center w-full">
             <label
               for="dropzone-file"
-              class="flex flex-col items-center justify-center w-full h-64 border border-sky-200 rounded-md cursor-pointer bg-slate-50"
+              class="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition"
             >
               <div
                 class="flex flex-col items-center justify-center pt-5 pb-6"
                 id="dropzone"
               >
                 <svg
-                  class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
+                  class="w-10 h-10 mb-4 text-gray-500"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -75,20 +212,19 @@
                     d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
                   />
                 </svg>
-                <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                  <span class="font-semibold">Click to upload</span> or drag and
-                  drop
+                <p class="mb-2 text-sm text-gray-600">
+                  <span class="font-semibold">Click to upload</span> or drag and drop
                 </p>
-                <p class="text-xs text-gray-500 dark:text-gray-400">
-                  SVG, PNG, JPG or GIF (MAX. 800x400px)
+                <p class="text-xs text-gray-500">
+                  PNG, JPG, GIF (MAX. 5MB)
                 </p>
               </div>
               <div
-                class="flex flex-col items-center justify-center w-full h-screen"
+                class="flex flex-col items-center justify-center w-full"
               >
                 <img
                   id="image-preview"
-                  class="hidden w-4/5 h-4/5 object-cover rounded-md"
+                  class="hidden max-w-xs max-h-56 object-contain rounded-lg"
                 />
               </div>
               <input
@@ -96,39 +232,60 @@
                 type="file"
                 class="hidden"
                 @change="showImage"
+                accept="image/*"
               />
             </label>
           </div>
         </div>
-        <fwb-button gradient="cyan-blue" class="w-full" type="submit"
-          >Create Account</fwb-button
-        >
-      </div>
-    </form>
-    <div class="place-self-center mt-3">Already Have and account? <a href="" class="hover:underline decoration-solid">Log In</a> </div>
+
+        <!-- Submit Button -->
+        <div class="flex gap-4 pt-6">
+          <button
+            type="submit"
+            :disabled="isLoading"
+            class="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-semibold py-3 rounded-md transition duration-200"
+          >
+            {{ isLoading ? 'Creating Student...' : 'Create Student' }}
+          </button>
+          <button
+            type="reset"
+            class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-900 font-semibold py-3 rounded-md transition duration-200"
+          >
+            Reset
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
 </template>
 
 <script>
-import { FwbSelect, FwbInput, FwbFileInput, FwbButton } from "flowbite-vue";
 import { toast } from "vue3-toastify";
 import { studentService, handleApiError } from "@/services";
 import "vue3-toastify/dist/index.css";
 
 export default {
   name: "AddStudentView",
-  components: { FwbSelect, FwbInput, FwbFileInput, FwbButton },
   data() {
     return {
       classes: [],
       sections: [],
+      teachers: [],
+      subjects: [],
       formData: {
         id: "",
         name: "",
+        fatherName: "",
+        motherName: "",
         email: "",
+        contactNo: "",
+        address: "",
+        dateOfBirth: "",
         classId: "",
         sectionId: "",
         rollNo: "",
+        teacherId: "",
+        selectedSubjects: [],
       },
       fileB64: null,
       isLoading: false,
@@ -136,23 +293,26 @@ export default {
     };
   },
   created() {
-    this.loadClassesAndSections();
+    this.loadAllOptions();
   },
   methods: {
     /**
-     * Load available classes and sections
+     * Load all required options (classes, sections, teachers, subjects)
      */
-    async loadClassesAndSections() {
+    async loadAllOptions() {
       this.isLoadingOptions = true;
       try {
-        // Load both in parallel
-        const [classesRes, sectionsRes] = await Promise.all([
+        const [classesRes, sectionsRes, teachersRes, subjectsRes] = await Promise.all([
           this.loadClasses(),
           this.loadSections(),
+          this.loadTeachers(),
+          this.loadSubjects(),
         ]);
         
         this.classes = classesRes || [];
         this.sections = sectionsRes || [];
+        this.teachers = teachersRes || [];
+        this.subjects = subjectsRes || [];
       } catch (error) {
         const errorInfo = handleApiError(error);
         toast.error(`Failed to load options: ${errorInfo.message}`);
@@ -162,15 +322,12 @@ export default {
     },
 
     /**
-     * Load classes from API (can be customized based on backend)
+     * Load classes from API
      */
     async loadClasses() {
       try {
-        // Using studentService - adjust endpoint if needed
         const { data } = await studentService.getClasses();
-        // This is a placeholder - adjust based on actual API structure
-        this.classes = data || [];
-        return this.classes;
+        return data || [];
       } catch (error) {
         console.error("Error loading classes:", error);
         return [];
@@ -178,16 +335,40 @@ export default {
     },
 
     /**
-     * Load sections from API (can be customized based on backend)
+     * Load sections from API
      */
     async loadSections() {
       try {
-        // This is a placeholder - adjust based on actual API structure
         const { data } = await studentService.getSections();
-        this.sections = data || [];
-        return this.sections;
+        return data || [];
       } catch (error) {
         console.error("Error loading sections:", error);
+        return [];
+      }
+    },
+
+    /**
+     * Load teachers from API
+     */
+    async loadTeachers() {
+      try {
+        const { data } = await studentService.getTeachers();
+        return data || [];
+      } catch (error) {
+        console.error("Error loading teachers:", error);
+        return [];
+      }
+    },
+
+    /**
+     * Load subjects from API
+     */
+    async loadSubjects() {
+      try {
+        const { data } = await studentService.getSubjects();
+        return data || [];
+      } catch (error) {
+        console.error("Error loading subjects:", error);
         return [];
       }
     },
@@ -197,11 +378,15 @@ export default {
      */
     validateForm() {
       if (!this.formData.name.trim()) {
-        toast.error("Name is required");
+        toast.error("Student name is required");
         return false;
       }
       if (!this.formData.email.trim()) {
         toast.error("Email is required");
+        return false;
+      }
+      if (!this.isValidEmail(this.formData.email)) {
+        toast.error("Please enter a valid email address");
         return false;
       }
       if (!this.formData.classId) {
@@ -220,6 +405,14 @@ export default {
     },
 
     /**
+     * Validate email format
+     */
+    isValidEmail(email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
+    },
+
+    /**
      * Submit student form
      */
     async submitForm() {
@@ -232,22 +425,25 @@ export default {
       try {
         const payload = {
           name: this.formData.name,
+          fatherName: this.formData.fatherName,
+          motherName: this.formData.motherName,
           email: this.formData.email,
+          contactNo: this.formData.contactNo,
+          address: this.formData.address,
+          dateOfBirth: this.formData.dateOfBirth,
           classId: this.formData.classId,
           sectionId: this.formData.sectionId,
           rollNo: this.formData.rollNo,
-          photo: this.fileB64,
+          teacherId: this.formData.teacherId,
+          subjectIds: this.formData.selectedSubjects,
+          profilePicture: this.fileB64,
         };
 
-        // Use studentService to create student
         await studentService.createStudent(payload);
         
         toast.success("Student created successfully!");
-        
-        // Reset form
         this.resetForm();
         
-        // Redirect after 1.5 seconds
         setTimeout(() => {
           this.$router.push("/students");
         }, 1500);
@@ -266,10 +462,17 @@ export default {
       this.formData = {
         id: "",
         name: "",
+        fatherName: "",
+        motherName: "",
         email: "",
+        contactNo: "",
+        address: "",
+        dateOfBirth: "",
         classId: "",
         sectionId: "",
         rollNo: "",
+        teacherId: "",
+        selectedSubjects: [],
       };
       this.fileB64 = null;
       const fileInput = document.getElementById("dropzone-file");
@@ -299,12 +502,14 @@ export default {
         // Validate file size (max 5MB)
         if (file.size > 5 * 1024 * 1024) {
           toast.error("File size must be less than 5MB");
+          fileInput.value = "";
           return;
         }
 
         // Validate file type
         if (!file.type.startsWith("image/")) {
           toast.error("Please select an image file");
+          fileInput.value = "";
           return;
         }
 
@@ -322,4 +527,33 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+/* Custom styles for form inputs */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+textarea::-webkit-scrollbar {
+  width: 8px;
+}
+
+textarea::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+textarea::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+textarea::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+</style>

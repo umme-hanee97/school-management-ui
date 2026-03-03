@@ -44,17 +44,32 @@
 
                     <!-- Subject Field -->
                     <div>
-                        <label for="subject" class="block text-sm font-medium text-gray-900 mb-2">
+                        <label class="block text-sm font-medium text-gray-900 mb-3">
                             Subject <span class="text-red-600">*</span>
                         </label>
-                        <input
-                            id="subject"
-                            v-model="formData.subject"
-                            type="text"
-                            placeholder="Enter the subject taught (e.g., Mathematics)"
-                            required
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                        />
+                        <div class="space-y-2 p-4 border border-gray-300 rounded-lg bg-gray-50">
+                            <div
+                                v-if="subjects.length === 0"
+                                class="text-gray-500 text-sm text-center py-4"
+                            >
+                                Loading subjects...
+                            </div>
+                            <div v-for="subject in subjects" :key="subject.id" class="flex items-center">
+                                <input
+                                    :id="`subject-${subject.id}`"
+                                    type="checkbox"
+                                    :checked="formData.subjects.includes(subject.id)"
+                                    @change="(event) => toggleSubject(subject.id, event.target.checked)"
+                                    class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-2 focus:ring-blue-500 cursor-pointer"
+                                />
+                                <label
+                                    :for="`subject-${subject.id}`"
+                                    class="ml-2 text-sm font-medium text-gray-700 cursor-pointer"
+                                >
+                                    {{ subject.subjectName }}
+                                </label>
+                            </div>
+                        </div>
                         <p v-if="errors.subject" class="mt-1 text-sm text-red-600">{{ errors.subject }}</p>
                     </div>
 
@@ -211,25 +226,54 @@
 </template>
 
 <script>
-import { reactive, ref } from "vue";
+import lookupService from "@/services/lookupService";
+import { reactive, ref, onMounted } from "vue";
 
 export default {
     setup() {
         const formData = reactive({
             name: "",
             email: "",
-            subject: "",
+            subjects: [],
         });
 
         const fileB64 = ref("");
         const fileName = ref("");
         const isLoading = ref(false);
+        const subjects = ref([]);
         const errors = reactive({
             name: "",
             email: "",
             subject: "",
         });
         const successMessage = ref("");
+
+        const fetchSubjects = async () => {
+            try {
+                const response = await lookupService.getSubjects();
+                subjects.value = response.data;
+            } catch (error) {
+                console.error("Error fetching subjects:", error);
+                // Fallback data for testing
+                subjects.value = [
+                    { id: 1, subjectName: "Mathematics", subjectCode: "MATH" },
+                    { id: 2, subjectName: "Science", subjectCode: "SCI" },
+                    { id: 3, subjectName: "English", subjectCode: "ENG" },
+                    { id: 4, subjectName: "History", subjectCode: "HIST" },
+                    { id: 5, subjectName: "Geography", subjectCode: "GEO" },
+                ];
+            }
+        };
+
+        const toggleSubject = (subjectId, isChecked) => {
+            if (isChecked) {
+                if (!formData.subjects.includes(subjectId)) {
+                    formData.subjects.push(subjectId);
+                }
+            } else {
+                formData.subjects = formData.subjects.filter(id => id !== subjectId);
+            }
+        };
 
         const validateForm = () => {
             errors.name = "";
@@ -246,8 +290,8 @@ export default {
                 errors.email = "Please enter a valid email address";
             }
 
-            if (!formData.subject.trim()) {
-                errors.subject = "Subject is required";
+            if (formData.subjects.length === 0) {
+                errors.subject = "Please select at least one subject";
             }
 
             return !errors.name && !errors.email && !errors.subject;
@@ -298,7 +342,7 @@ export default {
         const resetForm = () => {
             formData.name = "";
             formData.email = "";
-            formData.subject = "";
+            formData.subjects = [];
             fileB64.value = "";
             fileName.value = "";
             errors.name = "";
@@ -311,6 +355,10 @@ export default {
             fileName.value = "";
         };
 
+        onMounted(() => {
+            fetchSubjects();
+        });
+
         return {
             formData,
             fileB64,
@@ -318,10 +366,12 @@ export default {
             isLoading,
             errors,
             successMessage,
+            subjects,
             submitForm,
             resetForm,
             removeImage,
             handleFileUpload,
+            toggleSubject,
         };
     },
 };

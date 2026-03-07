@@ -42,6 +42,53 @@
                         <p v-if="errors.email" class="mt-1 text-sm text-red-600">{{ errors.email }}</p>
                     </div>
 
+                    <!-- Phone Number Field -->
+                    <div>
+                        <label for="phoneNumber" class="block text-sm font-medium text-gray-900 mb-2">
+                            Phone Number <span class="text-red-600">*</span>
+                        </label>
+                        <input
+                            id="phoneNumber"
+                            v-model="formData.phoneNumber"
+                            type="tel"
+                            placeholder="Enter teacher's phone number"
+                            required
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                        />
+                        <p v-if="errors.phoneNumber" class="mt-1 text-sm text-red-600">{{ errors.phoneNumber }}</p>
+                    </div>
+
+                    <!-- Address Field -->
+                    <div>
+                        <label for="address" class="block text-sm font-medium text-gray-900 mb-2">
+                            Address <span class="text-red-600">*</span>
+                        </label>
+                        <textarea
+                            id="address"
+                            v-model="formData.address"
+                            placeholder="Enter teacher's address"
+                            rows="3"
+                            required
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors resize-none"
+                        ></textarea>
+                        <p v-if="errors.address" class="mt-1 text-sm text-red-600">{{ errors.address }}</p>
+                    </div>
+
+                    <!-- Date of Birth Field -->
+                    <div>
+                        <label for="dateOfBirth" class="block text-sm font-medium text-gray-900 mb-2">
+                            Date of Birth <span class="text-red-600">*</span>
+                        </label>
+                        <input
+                            id="dateOfBirth"
+                            v-model="formData.dateOfBirth"
+                            type="date"
+                            required
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                        />
+                        <p v-if="errors.dateOfBirth" class="mt-1 text-sm text-red-600">{{ errors.dateOfBirth }}</p>
+                    </div>
+
                     <!-- Subject Field -->
                     <div>
                         <label class="block text-sm font-medium text-gray-900 mb-3">
@@ -58,7 +105,7 @@
                                 <input
                                     :id="`subject-${subject.id}`"
                                     type="checkbox"
-                                    :checked="formData.subjects.includes(subject.id)"
+                                    :checked="formData.subjectIds.includes(subject.id)"
                                     @change="(event) => toggleSubject(subject.id, event.target.checked)"
                                     class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-2 focus:ring-blue-500 cursor-pointer"
                                 />
@@ -227,6 +274,7 @@
 
 <script>
 import lookupService from "@/services/lookupService";
+import teacherService from "@/services/teacherservice";
 import { reactive, ref, onMounted } from "vue";
 
 export default {
@@ -234,7 +282,10 @@ export default {
         const formData = reactive({
             name: "",
             email: "",
-            subjects: [],
+            phoneNumber: "",
+            address: "",
+            dateOfBirth: "",
+            subjectIds: [],
         });
 
         const fileB64 = ref("");
@@ -244,6 +295,9 @@ export default {
         const errors = reactive({
             name: "",
             email: "",
+            phoneNumber: "",
+            address: "",
+            dateOfBirth: "",
             subject: "",
         });
         const successMessage = ref("");
@@ -251,7 +305,7 @@ export default {
         const fetchSubjects = async () => {
             try {
                 const response = await lookupService.getSubjects();
-                subjects.value = response.data;
+                subjects.value = response.data;                
             } catch (error) {
                 console.error("Error fetching subjects:", error);
                 // Fallback data for testing
@@ -267,17 +321,20 @@ export default {
 
         const toggleSubject = (subjectId, isChecked) => {
             if (isChecked) {
-                if (!formData.subjects.includes(subjectId)) {
-                    formData.subjects.push(subjectId);
+                if (!formData.subjectIds.includes(subjectId)) {
+                    formData.subjectIds.push(subjectId);
                 }
             } else {
-                formData.subjects = formData.subjects.filter(id => id !== subjectId);
+                formData.subjectIds = formData.subjectIds.filter(id => id !== subjectId);
             }
         };
 
         const validateForm = () => {
             errors.name = "";
             errors.email = "";
+            errors.phoneNumber = "";
+            errors.address = "";
+            errors.dateOfBirth = "";
             errors.subject = "";
 
             if (!formData.name.trim()) {
@@ -290,11 +347,25 @@ export default {
                 errors.email = "Please enter a valid email address";
             }
 
-            if (formData.subjects.length === 0) {
+            if (!formData.phoneNumber.trim()) {
+                errors.phoneNumber = "Phone number is required";
+            } else if (!/^[0-9\-\+\s\(\)]{10,}$/.test(formData.phoneNumber)) {
+                errors.phoneNumber = "Please enter a valid phone number";
+            }
+
+            if (!formData.address.trim()) {
+                errors.address = "Address is required";
+            }
+
+            if (!formData.dateOfBirth) {
+                errors.dateOfBirth = "Date of birth is required";
+            }
+
+            if (formData.subjectIds.length === 0) {
                 errors.subject = "Please select at least one subject";
             }
 
-            return !errors.name && !errors.email && !errors.subject;
+            return !errors.name && !errors.email && !errors.phoneNumber && !errors.address && !errors.dateOfBirth && !errors.subject;
         };
 
         const handleFileUpload = (event) => {
@@ -316,6 +387,7 @@ export default {
 
             isLoading.value = true;
             try {
+                const response = await teacherService.createTeacher(formData);
                 // Simulate API call to save teacher data
                 await new Promise((resolve) => setTimeout(resolve, 2000));
                 console.log("Teacher Data:", formData);
@@ -342,7 +414,10 @@ export default {
         const resetForm = () => {
             formData.name = "";
             formData.email = "";
-            formData.subjects = [];
+            formData.phoneNumber = "";
+            formData.address = "";
+            formData.dateOfBirth = "";
+            formData.subjectIds = [];
             fileB64.value = "";
             fileName.value = "";
             errors.name = "";

@@ -54,11 +54,11 @@ export default {
       const roles = this.user.roles.map(r => r.toLowerCase());
 
       if (roles.includes('student')) {
-        return { name: 'AddStudent' };
+        return { name: 'AddStudent', params: { username: this.user.name } };
       }
 
       if (roles.includes('teacher')) {
-        return { name: 'AddTeacher' };
+        return { name: 'AddTeacher', params: { username: this.user.name } };
       }
 
       return { name: 'ProfileEdit', params: { username: this.user.name } };

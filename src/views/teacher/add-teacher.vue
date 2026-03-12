@@ -178,12 +178,12 @@
               />
               <!-- Image Preview -->
               <div
-                v-if="fileB64"
+                v-if="formData.fileB64"
                 class="relative w-full h-64 rounded-lg overflow-hidden border-2 border-gray-300 bg-gray-100"
               >
                 <img
-                  :src="fileB64"
-                  :alt="fileName"
+                  :src="formData.fileB64"
+                  :alt="formData.fileName"
                   class="w-full h-full object-cover"
                 />
                 <div
@@ -232,7 +232,7 @@
                 <div
                   class="absolute top-3 right-3 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium"
                 >
-                  {{ fileName }}
+                  {{ formData.fileName }}
                 </div>
               </div>
 
@@ -366,10 +366,12 @@ export default {
       address: "",
       dateOfBirth: "",
       subjectIds: [],
+      fileB64: "",
+      fileName: "",
     });
 
-    const fileB64 = ref("");
-    const fileName = ref("");
+    // const fileB64 = ref("");
+    // const fileName = ref("");
     const isLoading = ref(false);
     const subjects = ref([]);
     const errors = reactive({
@@ -470,10 +472,10 @@ export default {
     const handleFileUpload = (event) => {
       const file = event.target.files?.[0];
       if (file) {
-        fileName.value = file.name;
+        formData.fileName = file.name;
         const reader = new FileReader();
         reader.onload = (e) => {
-          fileB64.value = e.target?.result || "";
+          formData.fileB64 = e.target?.result || "";
         };
         reader.readAsDataURL(file);
       }
@@ -490,7 +492,7 @@ export default {
         // Simulate API call to save teacher data
         await new Promise((resolve) => setTimeout(resolve, 2000));
         console.log("Teacher Data:", formData);
-        console.log("Profile Picture (Base64):", fileB64.value);
+        console.log("Profile Picture (Base64):", formData.fileB64);
 
         // Show success message
         successMessage.value = "Teacher added successfully!";
@@ -517,16 +519,16 @@ export default {
       formData.address = "";
       formData.dateOfBirth = "";
       formData.subjectIds = [];
-      fileB64.value = "";
-      fileName.value = "";
+      formData.fileB64 = "";
+      formData.fileName = "";
       errors.name = "";
       errors.email = "";
       errors.subject = "";
     };
 
     const removeImage = () => {
-      fileB64.value = "";
-      fileName.value = "";
+      formData.fileB64 = "";
+      formData.fileName = "";
     };
 
     onMounted(() => {
@@ -536,8 +538,8 @@ export default {
 
     return {
       formData,
-      fileB64,
-      fileName,
+      // fileB64,
+      // fileName,
       isLoading,
       errors,
       successMessage,

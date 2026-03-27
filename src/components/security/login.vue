@@ -211,12 +211,24 @@ export default {
           this.formData.password
         );
 
+        const payload = data?.data || data;
+        const token =
+          payload?.jwtToken ||
+          payload?.accessToken ||
+          payload?.token ||
+          "";
+        const username = payload?.username || this.formData.username;
+
         this.successMessage = "Login successful! Redirecting to dashboard...";
         
         // Store token if provided
-        if (data.jwtToken) {
-          localStorage.setItem("authToken", data.jwtToken);
-          localStorage.setItem("username", this.formData.username);
+        if (token) {
+          localStorage.setItem("authToken", token);
+          localStorage.setItem("username", username);
+        } else {
+          this.errors.global = "Login succeeded but no auth token was returned by the server.";
+          this.successMessage = "";
+          return;
         }
 
         // Store remember me preference

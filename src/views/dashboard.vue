@@ -49,6 +49,27 @@
             </table>
           </div>
 
+
+          <div class="bg-white rounded-lg shadow p-4">
+            <h2 class="font-semibold mb-3">Recent Teachers</h2>
+            <table class="w-full text-left text-sm">
+              <thead>
+                <tr class="text-gray-500">
+                  <th class="pb-2">Name</th>
+                  <th class="pb-2">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="student in recent" :key="student.id" class="border-t">
+                  <td class="py-2">{{ student.name }}</td>
+                  <td class="py-2 text-sm text-gray-600">{{ student.status }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+
+
           <div class="bg-white rounded-lg shadow p-4">
             <h2 class="font-semibold mb-3">Upcoming Events</h2>
             <ul class="text-sm text-gray-700 space-y-2">

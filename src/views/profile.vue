@@ -57,6 +57,18 @@ export default {
     this.loadProfile();
   },
   methods: {
+    normalizeRoles(roles) {
+      if (Array.isArray(roles)) {
+        return roles;
+      }
+
+      if (typeof roles === "string" && roles) {
+        return [roles];
+      }
+
+      return [];
+    },
+
     async loadProfile() {
       this.loading = true;
       this.error = "";
@@ -86,10 +98,11 @@ export default {
 
     mapProfileData(data) {
       this.user = {
+        username: data.username || localStorage.getItem("username") || "",
         name: data.name || data.fullName || "",
         email: data.email || "",
         phone: data.phone || "",
-        roles: data.roles || "",
+        roles: this.normalizeRoles(data.roles),
       };
     },
 
@@ -106,10 +119,11 @@ export default {
 
       // Default fallback data
       this.user = {
+        username: localStorage.getItem("username") || "",
         name: "User",
         email: localStorage.getItem("username") || "user@example.com",
         phone: "",
-        roles: "User",
+        roles: ["USER"],
       };
     },
   },

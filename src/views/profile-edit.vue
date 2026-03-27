@@ -21,6 +21,7 @@
         <div>
           <label class="block text-sm font-medium text-gray-700">Email</label>
           <input
+            readonly
             v-model="form.email"
             type="email"
             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
@@ -87,24 +88,33 @@ export default {
       message: "",
       messageClass: "text-sm text-green-600",
       isLoading: false,
-      roles: []
+      roles: [
+        {
+          name: "Teacher",
+        },
+        {
+          name: "Student",
+        },
+      ],
     };
   },
   props: {
     username: { type: String, required: false },
   },
   created() {
-    this.loadProfile(), this.loadAllRoles();
+    this.loadProfile();
+    // this.loadAllRoles();
   },
   methods: {
     async loadProfile() {
       try {
         const { data } = await profileService.getProfile(this.username);
-        this.form = {
-          name: data.name || data.fullName || "",
-          email: data.email || "",
-          roles: data.roles || [],
-        };
+        // this.form = {
+        //   name: data.name || data.fullName || "",
+        //   email: data.email || "",
+        //   roles: data.roles || [],
+        // };
+        this.form.email = data.email || "";
       } catch (error) {
         const errorInfo = handleApiError(error);
         this.loadFallbackProfile();
@@ -133,24 +143,24 @@ export default {
       this.isLoading = true;
 
       try {
-        const response = await profileService.updateProfile(this.form.name, this.form);
+        const response = await profileService.updateProfile(this.username, this.form);
 
         if (response.status === 200) {
           // Cache profile locally
-        localStorage.setItem("userProfile", JSON.stringify(this.form));
+          localStorage.setItem("userProfile", JSON.stringify(this.form));
 
-        this.message = "Profile saved successfully!";
-        this.messageClass = "text-sm text-green-600";
+          this.message = "Profile saved successfully!";
+          this.messageClass = "text-sm text-green-600";
 
-        // Redirect after 1.5 seconds
-        setTimeout(() => {
-          this.$router.push("/profile");
-        }, 1500);
+          // Redirect after 1.5 seconds
+          setTimeout(() => {
+            this.$router.push("/profile");
+          }, 1500);
         } else {
-          this.message = "Error saving profile: " + (response.message || "Unknown error");
-        this.messageClass = "text-sm text-red-600";
+          this.message =
+            "Error saving profile: " + (response.message || "Unknown error");
+          this.messageClass = "text-sm text-red-600";
         }
-        
       } catch (error) {
         const errorInfo = handleApiError(error);
         this.message = errorInfo.message || "Failed to save profile.";
@@ -160,18 +170,18 @@ export default {
       }
     },
 
-    loadAllRoles() {
-      profileService
-        .getAllRoles()
-        .then(({ data }) => {
-          this.roles = data;
-        })
-        .catch((error) => {
-          const errorInfo = handleApiError(error);
-          this.message = errorInfo.message || "Failed to load roles.";
-          this.messageClass = "text-sm text-red-600";
-        });
-    },
+    // loadAllRoles() {
+    //   profileService
+    //     .getAllRoles()
+    //     .then(({ data }) => {
+    //       this.roles = data;
+    //     })
+    //     .catch((error) => {
+    //       const errorInfo = handleApiError(error);
+    //       this.message = errorInfo.message || "Failed to load roles.";
+    //       this.messageClass = "text-sm text-red-600";
+    //     });
+    // },
 
     toggleRole(role) {
       if (this.form.role.includes(role)) {

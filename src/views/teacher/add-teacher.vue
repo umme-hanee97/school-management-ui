@@ -353,6 +353,7 @@ import lookupService from "@/services/lookupService";
 import teacherService from "@/services/teacherservice";
 import { profileService } from "@/services";
 import { reactive, ref, onMounted } from "vue";
+// import router from "@/router";
 
 export default {
   props: {
@@ -491,19 +492,22 @@ export default {
         const response = await teacherService.createTeacher(formData);
         // Simulate API call to save teacher data
         await new Promise((resolve) => setTimeout(resolve, 2000));
-        console.log("Teacher Data:", formData);
+        console.log("Teacher Data:", response);
         console.log("Profile Picture (Base64):", formData.fileB64);
 
+        if (response.status === 200) {
         // Show success message
         successMessage.value = "Teacher added successfully!";
 
         // Reset form after submission
         resetForm();
-
+        
         // Clear success message after 3 seconds
         setTimeout(() => {
+          this.$router.push("/dashboard");
           successMessage.value = "";
-        }, 3000);
+        }, 2000);
+      }
       } catch (error) {
         console.error("Error saving teacher data:", error);
         successMessage.value = "Error adding teacher. Please try again.";

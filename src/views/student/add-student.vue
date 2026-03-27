@@ -11,10 +11,14 @@
 
         <!-- Personal Information Section -->
         <div class="border-b pb-6">
-          <h2 class="text-xl font-semibold text-gray-900 mb-4">Personal Information</h2>
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">
+            Personal Information
+          </h2>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
-              <label class="block text-sm font-semibold text-gray-700 mb-2">Student Name *</label>
+              <label class="block text-sm font-semibold text-gray-700 mb-2"
+                >Student Name *</label
+              >
               <input
                 type="text"
                 v-model="formData.name"
@@ -24,7 +28,9 @@
               />
             </div>
             <div>
-              <label class="block text-sm font-semibold text-gray-700 mb-2">Father's Name</label>
+              <label class="block text-sm font-semibold text-gray-700 mb-2"
+                >Father's Name</label
+              >
               <input
                 type="text"
                 v-model="formData.fatherName"
@@ -33,7 +39,9 @@
               />
             </div>
             <div>
-              <label class="block text-sm font-semibold text-gray-700 mb-2">Mother's Name</label>
+              <label class="block text-sm font-semibold text-gray-700 mb-2"
+                >Mother's Name</label
+              >
               <input
                 type="text"
                 v-model="formData.motherName"
@@ -46,11 +54,16 @@
 
         <!-- Contact Information Section -->
         <div class="border-b pb-6">
-          <h2 class="text-xl font-semibold text-gray-900 mb-4">Contact Information</h2>
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">
+            Contact Information
+          </h2>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label class="block text-sm font-semibold text-gray-700 mb-2">Email Address *</label>
+              <label class="block text-sm font-semibold text-gray-700 mb-2"
+                >Email Address *</label
+              >
               <input
+                readonly
                 type="email"
                 v-model="formData.email"
                 placeholder="Enter email address"
@@ -59,7 +72,9 @@
               />
             </div>
             <div>
-              <label class="block text-sm font-semibold text-gray-700 mb-2">Contact Number</label>
+              <label class="block text-sm font-semibold text-gray-700 mb-2"
+                >Contact Number</label
+              >
               <input
                 type="tel"
                 v-model="formData.contactNo"
@@ -69,7 +84,9 @@
             </div>
           </div>
           <div class="mt-6">
-            <label class="block text-sm font-semibold text-gray-700 mb-2">Address</label>
+            <label class="block text-sm font-semibold text-gray-700 mb-2"
+              >Address</label
+            >
             <textarea
               v-model="formData.address"
               placeholder="Enter full address"
@@ -81,10 +98,14 @@
 
         <!-- Academic Information Section -->
         <div class="border-b pb-6">
-          <h2 class="text-xl font-semibold text-gray-900 mb-4">Academic Information</h2>
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">
+            Academic Information
+          </h2>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label class="block text-sm font-semibold text-gray-700 mb-2">Class *</label>
+              <label class="block text-sm font-semibold text-gray-700 mb-2"
+                >Class *</label
+              >
               <select
                 v-model="formData.classId"
                 class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -101,7 +122,9 @@
               </select>
             </div>
             <div>
-              <label class="block text-sm font-semibold text-gray-700 mb-2">Section *</label>
+              <label class="block text-sm font-semibold text-gray-700 mb-2"
+                >Section *</label
+              >
               <select
                 v-model="formData.sectionId"
                 class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -118,7 +141,9 @@
               </select>
             </div>
             <div>
-              <label class="block text-sm font-semibold text-gray-700 mb-2">Roll Number *</label>
+              <label class="block text-sm font-semibold text-gray-700 mb-2"
+                >Roll Number *</label
+              >
               <input
                 type="number"
                 v-model="formData.rollNo"
@@ -128,7 +153,9 @@
               />
             </div>
             <div>
-              <label class="block text-sm font-semibold text-gray-700 mb-2">Teacher</label>
+              <label class="block text-sm font-semibold text-gray-700 mb-2"
+                >Teacher</label
+              >
               <select
                 v-model="formData.teacherId"
                 class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -139,7 +166,7 @@
                   :key="key"
                   :value="value.id"
                 >
-                  {{ value.teacherName }}
+                  {{ value.name }}
                 </option>
               </select>
             </div>
@@ -148,9 +175,13 @@
 
         <!-- Date of Birth Section -->
         <div class="border-b pb-6">
-          <h2 class="text-xl font-semibold text-gray-900 mb-4">Date of Birth</h2>
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">
+            Date of Birth
+          </h2>
           <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-2">Date of Birth</label>
+            <label class="block text-sm font-semibold text-gray-700 mb-2"
+              >Date of Birth</label
+            >
             <input
               type="date"
               v-model="formData.dateOfBirth"
@@ -172,7 +203,7 @@
                 type="checkbox"
                 :id="'subject-' + subject.id"
                 :value="subject.id"
-                v-model="formData.selectedSubjects"
+                v-model="formData.subjects"
                 class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
               />
               <label
@@ -187,7 +218,9 @@
 
         <!-- Profile Picture Section -->
         <div class="border-b pb-6">
-          <h2 class="text-xl font-semibold text-gray-900 mb-4">Profile Picture</h2>
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">
+            Profile Picture
+          </h2>
           <div class="flex items-center justify-center w-full">
             <label
               for="dropzone-file"
@@ -213,15 +246,12 @@
                   />
                 </svg>
                 <p class="mb-2 text-sm text-gray-600">
-                  <span class="font-semibold">Click to upload</span> or drag and drop
+                  <span class="font-semibold">Click to upload</span> or drag and
+                  drop
                 </p>
-                <p class="text-xs text-gray-500">
-                  PNG, JPG, GIF (MAX. 5MB)
-                </p>
+                <p class="text-xs text-gray-500">PNG, JPG, GIF (MAX. 5MB)</p>
               </div>
-              <div
-                class="flex flex-col items-center justify-center w-full"
-              >
+              <div class="flex flex-col items-center justify-center w-full">
                 <img
                   id="image-preview"
                   class="hidden max-w-xs max-h-56 object-contain rounded-lg"
@@ -245,7 +275,7 @@
             :disabled="isLoading"
             class="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-semibold py-3 rounded-md transition duration-200"
           >
-            {{ isLoading ? 'Creating Student...' : 'Create Student' }}
+            {{ isLoading ? "Creating Student..." : "Create Student" }}
           </button>
           <button
             type="reset"
@@ -263,6 +293,8 @@
 import { toast } from "vue3-toastify";
 import { studentService, handleApiError } from "@/services";
 import "vue3-toastify/dist/index.css";
+import teacherService from "@/services/teacherservice";
+import profileService from "@/services/profileService";
 
 export default {
   name: "AddStudentView",
@@ -285,30 +317,44 @@ export default {
         sectionId: "",
         rollNo: "",
         teacherId: "",
-        selectedSubjects: [],
+        subjects: [],
       },
       fileB64: null,
       isLoading: false,
       isLoadingOptions: true,
     };
   },
+  props: {
+    username: { type: String, required: false },
+  },
   created() {
-    this.loadAllOptions();
+    this.loadAllOptions(), this.loadProfile();
   },
   methods: {
     /**
      * Load all required options (classes, sections, teachers, subjects)
      */
+
+    async loadProfile() {
+      try {
+        const { data } = await profileService.getProfile(this.username);
+        this.formData.email = data.email || "";
+      } catch (error) {
+        const errorInfo = handleApiError(error);
+      }
+    },
+
     async loadAllOptions() {
       this.isLoadingOptions = true;
       try {
-        const [classesRes, sectionsRes, teachersRes, subjectsRes] = await Promise.all([
-          this.loadClasses(),
-          this.loadSections(),
-          this.loadTeachers(),
-          this.loadSubjects(),
-        ]);
-        
+        const [classesRes, sectionsRes, teachersRes, subjectsRes] =
+          await Promise.all([
+            this.loadClasses(),
+            this.loadSections(),
+            this.loadTeachers(),
+            this.loadSubjects(),
+          ]);
+
         this.classes = classesRes || [];
         this.sections = sectionsRes || [];
         this.teachers = teachersRes || [];
@@ -352,7 +398,7 @@ export default {
      */
     async loadTeachers() {
       try {
-        const { data } = await studentService.getTeachers();
+        const { data } = await teacherService.getTeachers();
         return data || [];
       } catch (error) {
         console.error("Error loading teachers:", error);
@@ -435,15 +481,15 @@ export default {
           sectionId: this.formData.sectionId,
           rollNo: this.formData.rollNo,
           teacherId: this.formData.teacherId,
-          subjectIds: this.formData.selectedSubjects,
+          subjectIds: this.formData.subjects,
           profilePicture: this.fileB64,
         };
 
         await studentService.createStudent(payload);
-        
+
         toast.success("Student created successfully!");
         this.resetForm();
-        
+
         setTimeout(() => {
           this.$router.push("/students");
         }, 1500);
@@ -472,7 +518,7 @@ export default {
         sectionId: "",
         rollNo: "",
         teacherId: "",
-        selectedSubjects: [],
+        subjects: [],
       };
       this.fileB64 = null;
       const fileInput = document.getElementById("dropzone-file");
@@ -535,7 +581,7 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
-input[type=number] {
+input[type="number"] {
   -moz-appearance: textfield;
 }
 

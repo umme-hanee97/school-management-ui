@@ -64,6 +64,10 @@ export const studentService = {
 
   getSections(){
     return api.get('/lookup/sections');
+  },
+
+  getSubjects(){
+    return api.get('/lookup/subjects');
   }
 };
 

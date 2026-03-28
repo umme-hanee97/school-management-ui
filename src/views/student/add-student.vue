@@ -77,7 +77,7 @@
               >
               <input
                 type="tel"
-                v-model="formData.contactNo"
+                v-model="formData.phoneNumber"
                 placeholder="Enter contact number"
                 class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
@@ -320,6 +320,7 @@ export default {
         subjects: [],
       },
       fileB64: null,
+      fileName: "",
       isLoading: false,
       isLoadingOptions: true,
     };
@@ -423,6 +424,7 @@ export default {
      * Validate form before submission
      */
     validateForm() {
+
       if (!this.formData.name.trim()) {
         toast.error("Student name is required");
         return false;
@@ -474,25 +476,29 @@ export default {
           fatherName: this.formData.fatherName,
           motherName: this.formData.motherName,
           email: this.formData.email,
-          contactNo: this.formData.contactNo,
+          phoneNumber: this.formData.phoneNumber,
           address: this.formData.address,
           dateOfBirth: this.formData.dateOfBirth,
           classId: this.formData.classId,
           sectionId: this.formData.sectionId,
-          rollNo: this.formData.rollNo,
+          rollNumber: this.formData.rollNo,
           teacherId: this.formData.teacherId,
-          subjectIds: this.formData.subjects,
-          profilePicture: this.fileB64,
+          subjects: this.formData.subjects,
+          fileB64: this.fileB64,
+          fileName: this.fileName,
         };
 
-        await studentService.createStudent(payload);
+        const  data  = await studentService.createStudent(payload);
+        console.log(data);
+        
+        if (data.status === 200) {
+          toast.success("Student created successfully!");
+          this.resetForm();
 
-        toast.success("Student created successfully!");
-        this.resetForm();
-
-        setTimeout(() => {
-          this.$router.push("/students");
-        }, 1500);
+          setTimeout(() => {
+            this.$router.push("/dashboard");
+          }, 1500);
+        }
       } catch (error) {
         const errorInfo = handleApiError(error);
         toast.error(errorInfo.message || "Failed to create student");
@@ -521,6 +527,7 @@ export default {
         subjects: [],
       };
       this.fileB64 = null;
+      this.fileName = "";
       const fileInput = document.getElementById("dropzone-file");
       if (fileInput) {
         fileInput.value = "";
@@ -564,7 +571,8 @@ export default {
           svgDiv.classList.add("hidden");
           imagePreview.classList.remove("hidden");
           imagePreview.src = e.target.result;
-          this.fileB64 = e.target.result.split(",")[1];
+          this.fileB64 = e.target.result;
+          this.fileName = file.name;
         };
         reader.readAsDataURL(file);
       }

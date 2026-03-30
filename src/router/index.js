@@ -6,11 +6,11 @@ const routes = [
   { path: '/', name: 'Home', component: Login },
   { path: '/login', name: 'Login', component: Login },
   { path: '/register', name: 'Register', component: Register },
-  { path: '/dashboard', name: 'Dashboard', component: () => import('@/views/dashboard.vue'), meta: { requiresAuth: true } }
-  ,{ path: '/profile/:username?', name: 'Profile', component: () => import('@/views/profile.vue'), meta: { requiresAuth: true } }
-  ,{ path: '/profile/edit/:username?', name: 'ProfileEdit', props: true, component: () => import('@/views/profile-edit.vue'), meta: { requiresAuth: true } }
-  ,{ path: '/add-student/:username?', name: 'AddStudent', props: true, component: () => import('@/views/student/add-student.vue'), meta: { requiresAuth: true } }
-  ,{ path: '/add-teacher/:username?', name: 'AddTeacher', props: true, component: () => import('@/views/teacher/add-teacher.vue'), meta: { requiresAuth: true } }
+  { path: '/dashboard/:username?', name: 'Dashboard', props: true, component: () => import('@/views/dashboard.vue'), meta: { requiresAuth: true } }
+  , { path: '/profile/:username?', name: 'Profile', component: () => import('@/views/profile.vue'), meta: { requiresAuth: true } }
+  , { path: '/profile/edit/:username?', name: 'ProfileEdit', props: true, component: () => import('@/views/profile-edit.vue'), meta: { requiresAuth: true } }
+  , { path: '/add-student/:username?', name: 'AddStudent', props: true, component: () => import('@/views/student/add-student.vue'), meta: { requiresAuth: true } }
+  , { path: '/add-teacher/:username?', name: 'AddTeacher', props: true, component: () => import('@/views/teacher/add-teacher.vue'), meta: { requiresAuth: true } }
 ];
 
 const router = createRouter({

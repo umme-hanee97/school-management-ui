@@ -19,6 +19,10 @@ export const studentService = {
     return api.get(`/students/${studentId}`);
   },
 
+  getStudentByEmail(email) {
+    return api.get(`/students/email/${email}`);
+  },
+
   /**
    * Create new student
    * @param {Object} studentData - { firstName, lastName, email, phone, etc }

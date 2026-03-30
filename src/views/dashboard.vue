@@ -10,7 +10,7 @@
           <h1 class="text-2xl font-bold text-gray-800">Dashboard</h1>
           <div class="flex items-center gap-4">
             <input placeholder="Search" class="px-3 py-2 border rounded-lg" />
-            <div class="bg-white px-3 py-2 rounded-lg shadow">Admin</div>
+            <div class="bg-white px-3 py-2 rounded-lg shadow" id="role"></div>
           </div>
         </header>
 
@@ -86,6 +86,7 @@
 import Sidebar from '@/components/dashboard/Sidebar.vue';
 import StatCard from '@/components/dashboard/StatCard.vue';
 import { dashboardService, handleApiError } from '@/services';
+import profileService from '@/services/profileService';
 
 export default {
   name: 'DashboardView',
@@ -99,8 +100,13 @@ export default {
       error: '',
     };
   },
+  props: {
+    username: { type: String, required: false },
+  },
   created() {
-    this.loadDashboardData();
+    this.loadDashboardData(),
+    this.loadProfile();
+    
   },
   methods: {
     async loadDashboardData() {
@@ -165,6 +171,16 @@ export default {
 
       if (this.stats.students === 0) {
         this.stats = { students: 1240, teachers: 58, classes: 32 };
+      }
+    },
+
+    async loadProfile () {
+      try {
+        const { data } = await profileService.getProfile(this.username);
+        console.log(data);
+        document.getElementById("role").innerHTML = data.roles
+      } catch (error) {
+        console.error("Error loading profile:", error);
       }
     },
 

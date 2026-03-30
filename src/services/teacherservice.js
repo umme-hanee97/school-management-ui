@@ -19,6 +19,10 @@ export const teacherService = {
     return api.get(`/teachers/${teacherId}`);
   },
 
+  getTeacherByEmail(email) {
+    return api.get(`/teachers/email/${email}`);
+  },
+
   /**
    * Create new teacher
    * @param {Object} teacherData - { firstName, lastName, email, phone, etc }

@@ -274,6 +274,7 @@
             <button
               type="submit"
               :disabled="isLoading"
+              id="submitBtn"
               class="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium py-3 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2"
             >
               <svg
@@ -361,6 +362,7 @@ export default {
   },
   setup(props) {
     const formData = reactive({
+      id: "",
       name: "",
       email: "",
       phoneNumber: "",
@@ -389,6 +391,21 @@ export default {
       try {
         const { data } = await profileService.getProfile(props.username);
         formData.email = data.email || "";
+        const teacherData = await teacherService.getTeacherByEmail(data.email);
+        console.log(teacherData.data);
+        // const submitBtn = document.getElementById("submitBtn");
+        if (teacherData != null) {
+          formData.id = teacherData.data.id;
+          formData.name = teacherData.data.name;
+          formData.email = teacherData.data.email;
+          formData.phoneNumber = teacherData.data.phoneNumber;
+          formData.address = teacherData.data.address;
+          formData.dateOfBirth = teacherData.data.dateOfBirth;
+          formData.subjectIds = teacherData.data.subjectIds;
+          formData.fileB64 = teacherData.data.fileB64;
+          formData.fileName = teacherData.data.fileName;
+          // submitBtn.innerText = this.isLoading ? "Updating..." : "Update Teacher" ;
+        }
       } catch (error) {
         console.error("Error loading profile:", error);
         formData.email = "";
@@ -496,18 +513,18 @@ export default {
         console.log("Profile Picture (Base64):", formData.fileB64);
 
         if (response.status === 200) {
-        // Show success message
-        successMessage.value = "Teacher added successfully!";
+          // Show success message
+          successMessage.value = "Teacher added successfully!";
 
-        // Reset form after submission
-        resetForm();
-        
-        // Clear success message after 3 seconds
-        setTimeout(() => {
-          this.$router.push("/dashboard");
-          successMessage.value = "";
-        }, 2000);
-      }
+          // Reset form after submission
+          resetForm();
+
+          // Clear success message after 3 seconds
+          setTimeout(() => {
+            this.$router.push("/dashboard");
+            successMessage.value = "";
+          }, 2000);
+        }
       } catch (error) {
         console.error("Error saving teacher data:", error);
         successMessage.value = "Error adding teacher. Please try again.";

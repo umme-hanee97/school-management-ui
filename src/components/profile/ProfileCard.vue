@@ -41,7 +41,6 @@ export default {
   },
   computed: {
     normalizedRoles() {
-      console.log(this.user);
       if (Array.isArray(this.user?.roles)) {
         return this.user.roles;
       }

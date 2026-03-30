@@ -273,6 +273,7 @@
           <button
             type="submit"
             :disabled="isLoading"
+            id="submitBtn"
             class="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-semibold py-3 rounded-md transition duration-200"
           >
             {{ isLoading ? "Creating Student..." : "Create Student" }}
@@ -310,7 +311,7 @@ export default {
         fatherName: "",
         motherName: "",
         email: "",
-        contactNo: "",
+        phoneNumber: "",
         address: "",
         dateOfBirth: "",
         classId: "",
@@ -340,6 +341,32 @@ export default {
       try {
         const { data } = await profileService.getProfile(this.username);
         this.formData.email = data.email || "";
+        const studentData = await studentService.getStudentByEmail(data.email);
+        const imagePreview = document.getElementById("image-preview");
+        const svgDiv = document.getElementById("dropzone");
+        const submitBtn = document.getElementById("submitBtn");
+
+        if (studentData != null) {
+          this.formData.id = studentData.data.id;
+          this.formData.name = studentData.data.name;
+          this.formData.fatherName = studentData.data.fatherName;
+          this.formData.motherName = studentData.data.motherName;
+          this.formData.email = studentData.data.email;
+          this.formData.phoneNumber = studentData.data.phoneNumber;
+          this.formData.address = studentData.data.address;
+          this.formData.dateOfBirth = studentData.data.dateOfBirth;
+          this.formData.classId = studentData.data.classId;
+          this.formData.sectionId = studentData.data.sectionId;
+          this.formData.rollNo = studentData.data.rollNumber;
+          this.formData.teacherId = studentData.data.teacherId;
+          this.formData.subjects = studentData.data.subjects;
+          this.fileB64 = studentData.data.fileB64;
+          this.fileName = studentData.data.fileName;
+          svgDiv.classList.add("hidden");
+          imagePreview.classList.remove("hidden");
+          imagePreview.src = studentData.data.fileB64;
+          submitBtn.innerText = this.isLoading ? "Updating Student..." : "Update Student";
+        }
       } catch (error) {
         const errorInfo = handleApiError(error);
       }
@@ -424,7 +451,6 @@ export default {
      * Validate form before submission
      */
     validateForm() {
-
       if (!this.formData.name.trim()) {
         toast.error("Student name is required");
         return false;
@@ -488,9 +514,8 @@ export default {
           fileName: this.fileName,
         };
 
-        const  data  = await studentService.createStudent(payload);
-        console.log(data);
-        
+        const data = await studentService.createStudent(payload);
+
         if (data.status === 200) {
           toast.success("Student created successfully!");
           this.resetForm();
@@ -517,7 +542,7 @@ export default {
         fatherName: "",
         motherName: "",
         email: "",
-        contactNo: "",
+        phoneNumber: "",
         address: "",
         dateOfBirth: "",
         classId: "",

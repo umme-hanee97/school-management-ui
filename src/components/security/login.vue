@@ -1,9 +1,13 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-indigo-600 to-purple-700 flex items-center justify-center p-4">
+  <div
+    class="min-h-screen bg-gradient-to-br from-indigo-600 to-purple-700 flex items-center justify-center p-4"
+  >
     <div class="w-full max-w-md">
       <!-- Logo/Brand Section -->
       <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center w-16 h-16 bg-white rounded-full mb-4 shadow-lg">
+        <div
+          class="inline-flex items-center justify-center w-16 h-16 bg-white rounded-full mb-4 shadow-lg"
+        >
           <span class="text-3xl font-bold text-indigo-600">📚</span>
         </div>
         <h1 class="text-4xl font-bold text-white mb-2">SchoolHub</h1>
@@ -22,7 +26,10 @@
         <form @submit.prevent="handleLogin">
           <!-- username Field -->
           <div class="mb-5">
-            <label for="username" class="block text-sm font-semibold text-gray-700 mb-2">
+            <label
+              for="username"
+              class="block text-sm font-semibold text-gray-700 mb-2"
+            >
               Username
             </label>
             <div class="relative">
@@ -32,7 +39,9 @@
                 type="username"
                 placeholder="TestUser"
                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition placeholder-gray-400"
-                :class="{ 'border-red-500 focus:ring-red-200': errors.username }"
+                :class="{
+                  'border-red-500 focus:ring-red-200': errors.username,
+                }"
               />
               <span class="absolute right-3 top-3 text-gray-400">✉️</span>
             </div>
@@ -43,7 +52,10 @@
 
           <!-- Password Field -->
           <div class="mb-6">
-            <label for="password" class="block text-sm font-semibold text-gray-700 mb-2">
+            <label
+              for="password"
+              class="block text-sm font-semibold text-gray-700 mb-2"
+            >
               Password
             </label>
             <div class="relative">
@@ -53,14 +65,16 @@
                 :type="showPassword ? 'text' : 'password'"
                 placeholder="Enter your password"
                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition placeholder-gray-400"
-                :class="{ 'border-red-500 focus:ring-red-200': errors.password }"
+                :class="{
+                  'border-red-500 focus:ring-red-200': errors.password,
+                }"
               />
               <button
                 type="button"
                 @click="showPassword = !showPassword"
                 class="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
               >
-                {{ showPassword ? '👁️' : '👁️‍🗨️' }}
+                {{ showPassword ? "👁️" : "👁️‍🗨️" }}
               </button>
             </div>
             <p v-if="errors.password" class="text-red-500 text-sm mt-1.5">
@@ -99,7 +113,9 @@
             v-if="successMessage"
             class="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg"
           >
-            <p class="text-green-700 text-sm font-medium">{{ successMessage }}</p>
+            <p class="text-green-700 text-sm font-medium">
+              {{ successMessage }}
+            </p>
           </div>
 
           <!-- Submit Button -->
@@ -142,11 +158,23 @@
           © 2026 School Management System. All rights reserved.
         </p>
         <div class="mt-3 flex justify-center gap-4">
-          <a href="#" class="text-indigo-100 hover:text-white text-xs transition">Privacy</a>
+          <a
+            href="#"
+            class="text-indigo-100 hover:text-white text-xs transition"
+            >Privacy</a
+          >
           <span class="text-indigo-100">•</span>
-          <a href="#" class="text-indigo-100 hover:text-white text-xs transition">Terms</a>
+          <a
+            href="#"
+            class="text-indigo-100 hover:text-white text-xs transition"
+            >Terms</a
+          >
           <span class="text-indigo-100">•</span>
-          <a href="#" class="text-indigo-100 hover:text-white text-xs transition">Support</a>
+          <a
+            href="#"
+            class="text-indigo-100 hover:text-white text-xs transition"
+            >Support</a
+          >
         </div>
       </div>
     </div>
@@ -154,7 +182,7 @@
 </template>
 
 <script>
-import { authService, handleApiError } from '@/services';
+import { authService, handleApiError } from "@/services";
 
 export default {
   name: "Login",
@@ -213,20 +241,18 @@ export default {
 
         const payload = data?.data || data;
         const token =
-          payload?.jwtToken ||
-          payload?.accessToken ||
-          payload?.token ||
-          "";
+          payload?.jwtToken || payload?.accessToken || payload?.token || "";
         const username = payload?.username || this.formData.username;
 
         this.successMessage = "Login successful! Redirecting to dashboard...";
-        
+
         // Store token if provided
         if (token) {
           localStorage.setItem("authToken", token);
           localStorage.setItem("username", username);
         } else {
-          this.errors.global = "Login succeeded but no auth token was returned by the server.";
+          this.errors.global =
+            "Login succeeded but no auth token was returned by the server.";
           this.successMessage = "";
           return;
         }
@@ -238,7 +264,10 @@ export default {
 
         // Redirect to dashboard after 1.5 seconds
         setTimeout(() => {
-          this.$router.push("/dashboard");
+          this.$router.push({
+            name: "Dashboard",
+            params: { username: this.formData.username },
+          });
         }, 1500);
       } catch (error) {
         const errorInfo = handleApiError(error);

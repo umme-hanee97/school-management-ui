@@ -176,7 +176,7 @@ export default {
 
     async loadProfile () {
       try {
-        const { data } = await profileService.getProfile(this.username);
+        const { data } = await profileService.getProfile(this.username || localStorage.getItem("username"));
         console.log(data);
         document.getElementById("role").innerHTML = data.roles
       } catch (error) {

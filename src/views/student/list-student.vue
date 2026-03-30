@@ -62,7 +62,7 @@
               <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ student.name }}</td>
               <td class="px-6 py-4 text-sm text-gray-600">{{ student.email }}</td>
               <td class="px-6 py-4 text-sm text-gray-600">{{ student.className || "—" }}</td>
-              <td class="px-6 py-4 text-sm text-gray-600">{{ student.rollNo || "—" }}</td>
+              <td class="px-6 py-4 text-sm text-gray-600">{{ student.rollNumber || "—" }}</td>
               <td class="px-6 py-4 text-sm">
                 <span
                   :class="[

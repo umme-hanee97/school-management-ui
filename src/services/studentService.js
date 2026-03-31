@@ -32,6 +32,11 @@ export const studentService = {
     return api.post('/students', studentData);
   },
 
+
+  editStudentProfile(studentData) {
+    return api.post('/students/editStudentProfile', studentData);
+  },
+
   /**
    * Update student
    * @param {number|string} studentId

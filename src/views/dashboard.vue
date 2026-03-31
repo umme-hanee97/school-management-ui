@@ -178,7 +178,11 @@ export default {
       try {
         const { data } = await profileService.getProfile(this.username || localStorage.getItem("username"));
         console.log(data);
-        document.getElementById("role").innerHTML = data.roles
+        if (data.roles.length > 1) {
+          document.getElementById("role").innerHTML = data.roles[1]
+        } else {
+          document.getElementById("role").innerHTML = data.roles
+        }
       } catch (error) {
         console.error("Error loading profile:", error);
       }

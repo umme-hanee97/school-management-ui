@@ -63,6 +63,7 @@
                 >Email Address *</label
               >
               <input
+                readonly
                 type="email"
                 v-model="formData.email"
                 placeholder="Enter email address"
@@ -294,9 +295,10 @@ import { toast } from "vue3-toastify";
 import { studentService, handleApiError } from "@/services";
 import "vue3-toastify/dist/index.css";
 import teacherService from "@/services/teacherservice";
+import profileService from "@/services/profileService";
 
 export default {
-  name: "AddStudentView",
+  name: "EditStudentProfileView",
   data() {
     return {
       classes: [],
@@ -328,12 +330,47 @@ export default {
     username: { type: String, required: false },
   },
   created() {
-    this.loadAllOptions();
+    this.loadAllOptions(), this.loadProfile();
   },
   methods: {
     /**
      * Load all required options (classes, sections, teachers, subjects)
      */
+
+    async loadProfile() {
+      try {
+        const { data } = await profileService.getProfile(this.username);
+        this.formData.email = data.email || "";
+        const studentData = await studentService.getStudentByEmail(data.email);
+        const imagePreview = document.getElementById("image-preview");
+        const svgDiv = document.getElementById("dropzone");
+        const submitBtn = document.getElementById("submitBtn");
+
+        if (studentData != null) {
+          this.formData.id = studentData.data.id;
+          this.formData.name = studentData.data.name;
+          this.formData.fatherName = studentData.data.fatherName;
+          this.formData.motherName = studentData.data.motherName;
+          this.formData.email = studentData.data.email;
+          this.formData.phoneNumber = studentData.data.phoneNumber;
+          this.formData.address = studentData.data.address;
+          this.formData.dateOfBirth = studentData.data.dateOfBirth;
+          this.formData.classId = studentData.data.classId;
+          this.formData.sectionId = studentData.data.sectionId;
+          this.formData.rollNo = studentData.data.rollNumber;
+          this.formData.teacherId = studentData.data.teacherId;
+          this.formData.subjects = studentData.data.subjects;
+          this.fileB64 = studentData.data.fileB64;
+          this.fileName = studentData.data.fileName;
+          svgDiv.classList.add("hidden");
+          imagePreview.classList.remove("hidden");
+          imagePreview.src = studentData.data.fileB64;
+          submitBtn.innerText = this.isLoading ? "Updating Student..." : "Update Student";
+        }
+      } catch (error) {
+        const errorInfo = handleApiError(error);
+      }
+    },
 
     async loadAllOptions() {
       this.isLoadingOptions = true;
@@ -477,7 +514,7 @@ export default {
           fileName: this.fileName,
         };
 
-        const data = await studentService.createStudent(payload);
+        const data = await studentService.editStudentProfile(payload);
 
         if (data.status === 200) {
           toast.success("Student created successfully!");

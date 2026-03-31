@@ -96,14 +96,14 @@ export default {
 
       if (roles.includes("student")) {
         return {
-          name: "AddStudent",
+          name: "EditStudentProfile",
           params: { username: this.profileUsername },
         };
       }
 
       if (roles.includes("teacher")) {
         return {
-          name: "AddTeacher",
+          name: "EditTeacherProfile",
           params: { username: this.profileUsername },
         };
       }

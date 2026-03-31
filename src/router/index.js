@@ -3,6 +3,8 @@ import Register from '@/components/security/register.vue';
 import AddStudent from '@/views/student/add-student.vue';
 import editStudentProfile from '@/views/student/edit-student-profile.vue';
 import ListStudent from '@/views/student/list-student.vue';
+import AddTeacher from '@/views/teacher/add-teacher.vue';
+import ListTeacher from '@/views/teacher/list-teacher.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 
 const routes = [
@@ -15,7 +17,9 @@ const routes = [
   , { path: '/edit-student-profile/:username?', name: 'EditStudentProfile', props: true, component: () => import('@/views/student/edit-student-profile.vue'), meta: { requiresAuth: true } }
   , { path: '/edit-teacher-profile/:username?', name: 'EditTeacherProfile', props: true, component: () => import('@/views/teacher/edit-teacher-profile.vue'), meta: { requiresAuth: true } },
   { path: '/students', name: 'ListStudents', component: ListStudent },
-  { path: '/students/add', name: 'AddStudent', component: AddStudent }
+  { path: '/students/add', name: 'AddStudent', component: AddStudent },
+  { path: '/teachers', name: 'ListTeacher', component: ListTeacher },
+  { path: '/teachers/add', name: 'AddTeacher', component: AddTeacher }
 ];
 
 const router = createRouter({

@@ -2,7 +2,7 @@
   <div class="min-h-screen bg-gray-50 py-10 px-4">
     <div class="max-w-5xl mx-auto bg-white shadow-2xl rounded-lg p-8">
       <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-900 mb-2">Add New Student</h1>
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">Edit Student</h1>
         <p class="text-gray-600">Fill in all the required information below</p>
       </div>
 
@@ -63,6 +63,7 @@
                 >Email Address *</label
               >
               <input
+                readonly
                 type="email"
                 v-model="formData.email"
                 placeholder="Enter email address"
@@ -291,12 +292,11 @@
 
 <script>
 import { toast } from "vue3-toastify";
-import { studentService, handleApiError } from "@/services";
+import { studentService, handleApiError, teacherService } from "@/services";
 import "vue3-toastify/dist/index.css";
-import teacherService from "@/services/teacherservice";
 
 export default {
-  name: "AddStudentView",
+  name: "EditStudentView",
   data() {
     return {
       classes: [],
@@ -326,15 +326,49 @@ export default {
     };
   },
   props: {
-    username: { type: String, required: false },
+    id: { type: String, required: false },
   },
   created() {
-    this.loadAllOptions();
+    this.loadAllOptions(), this.loadProfile();
   },
   methods: {
     /**
      * Load all required options (classes, sections, teachers, subjects)
      */
+
+    async loadProfile() {
+      try {
+        const studentData = await studentService.getStudentById(this.id);
+        const imagePreview = document.getElementById("image-preview");
+        const svgDiv = document.getElementById("dropzone");
+        const submitBtn = document.getElementById("submitBtn");
+
+        if (studentData != null) {
+          this.formData.id = studentData.data.id;
+          this.formData.name = studentData.data.name;
+          this.formData.fatherName = studentData.data.fatherName;
+          this.formData.motherName = studentData.data.motherName;
+          this.formData.email = studentData.data.email;
+          this.formData.phoneNumber = studentData.data.phoneNumber;
+          this.formData.address = studentData.data.address;
+          this.formData.dateOfBirth = studentData.data.dateOfBirth;
+          this.formData.classId = studentData.data.classId;
+          this.formData.sectionId = studentData.data.sectionId;
+          this.formData.rollNo = studentData.data.rollNumber;
+          this.formData.teacherId = studentData.data.teacherId;
+          this.formData.subjects = studentData.data.subjects;
+          this.fileB64 = studentData.data.fileB64;
+          this.fileName = studentData.data.fileType;
+          this.fileName = studentData.data.fileName;
+          svgDiv.classList.add("hidden");
+          imagePreview.classList.remove("hidden");
+          imagePreview.src = "data:"+studentData.data.fileType+";base64,"+ studentData.data.fileB64;
+          submitBtn.innerText = this.isLoading ? "Updating Student..." : "Update Student";
+        }
+      } catch (error) {
+        const errorInfo = handleApiError(error);
+      }
+    },
 
     async loadAllOptions() {
       this.isLoadingOptions = true;
@@ -479,7 +513,7 @@ export default {
           fileName: this.fileName,
         };
 
-        const data = await studentService.createStudent(payload);
+        const data = await studentService.editStudentProfile(payload);
 
         if (data.status === 200) {
           toast.success("Student created successfully!");
@@ -543,9 +577,9 @@ export default {
       const file = fileInput.files[0];
 
       if (file) {
-        // Validate file size (max 1MB)
-        if (file.size > 1 * 1024 * 1024) {
-          toast.error("File size must be less than 1MB");
+        // Validate file size (max 5MB)
+        if (file.size > 5 * 1024 * 1024) {
+          toast.error("File size must be less than 5MB");
           fileInput.value = "";
           return;
         }
@@ -562,7 +596,7 @@ export default {
           svgDiv.classList.add("hidden");
           imagePreview.classList.remove("hidden");
           imagePreview.src = e.target.result;
-          this.fileB64 = e.target.result.split(",")[1];
+          this.fileB64 = e.target.result;
           this.fileType = file.type;
           this.fileName = file.name;
         };

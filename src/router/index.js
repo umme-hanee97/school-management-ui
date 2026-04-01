@@ -2,6 +2,7 @@ import Login from '@/components/security/login.vue';
 import Register from '@/components/security/register.vue';
 import AddStudent from '@/views/student/add-student.vue';
 import editStudentProfile from '@/views/student/edit-student-profile.vue';
+import EditStudent from '@/views/student/edit-student.vue';
 import ListStudent from '@/views/student/list-student.vue';
 import AddTeacher from '@/views/teacher/add-teacher.vue';
 import ListTeacher from '@/views/teacher/list-teacher.vue';
@@ -16,10 +17,11 @@ const routes = [
   , { path: '/profile/edit/:username?', name: 'ProfileEdit', props: true, component: () => import('@/views/profile-edit.vue'), meta: { requiresAuth: true } }
   , { path: '/edit-student-profile/:username?', name: 'EditStudentProfile', props: true, component: () => import('@/views/student/edit-student-profile.vue'), meta: { requiresAuth: true } }
   , { path: '/edit-teacher-profile/:username?', name: 'EditTeacherProfile', props: true, component: () => import('@/views/teacher/edit-teacher-profile.vue'), meta: { requiresAuth: true } },
-  { path: '/students', name: 'ListStudents', component: ListStudent },
-  { path: '/students/add', name: 'AddStudent', component: AddStudent },
-  { path: '/teachers', name: 'ListTeacher', component: ListTeacher },
-  { path: '/teachers/add', name: 'AddTeacher', component: AddTeacher }
+  { path: '/students', name: 'ListStudents', component: ListStudent, meta: { requiresAuth: true } },
+  { path: '/students/add', name: 'AddStudent', component: AddStudent, meta: { requiresAuth: true } },
+  { path: '/students/edit/:id?', name: 'EditStudent',props: true, component: EditStudent, meta: { requiresAuth: true } },
+  { path: '/teachers', name: 'ListTeacher', component: ListTeacher, meta: { requiresAuth: true } },
+  { path: '/teachers/add', name: 'AddTeacher', component: AddTeacher, meta: { requiresAuth: true } }
 ];
 
 const router = createRouter({

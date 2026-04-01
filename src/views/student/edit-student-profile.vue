@@ -2,7 +2,7 @@
   <div class="min-h-screen bg-gray-50 py-10 px-4">
     <div class="max-w-5xl mx-auto bg-white shadow-2xl rounded-lg p-8">
       <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-900 mb-2">Add New Student</h1>
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">Edit Profile</h1>
         <p class="text-gray-600">Fill in all the required information below</p>
       </div>
 
@@ -321,6 +321,7 @@ export default {
         subjects: [],
       },
       fileB64: null,
+      fileType: "",
       fileName: "",
       isLoading: false,
       isLoadingOptions: true,
@@ -361,10 +362,11 @@ export default {
           this.formData.teacherId = studentData.data.teacherId;
           this.formData.subjects = studentData.data.subjects;
           this.fileB64 = studentData.data.fileB64;
+          this.fileType = studentData.data.fileType;
           this.fileName = studentData.data.fileName;
           svgDiv.classList.add("hidden");
           imagePreview.classList.remove("hidden");
-          imagePreview.src = studentData.data.fileB64;
+          imagePreview.src ="data:" + studentData.data.fileType + ";base64," + studentData.data.fileB64;
           submitBtn.innerText = this.isLoading ? "Updating Student..." : "Update Student";
         }
       } catch (error) {
@@ -511,6 +513,7 @@ export default {
           teacherId: this.formData.teacherId,
           subjects: this.formData.subjects,
           fileB64: this.fileB64,
+          fileType: this.fileType,
           fileName: this.fileName,
         };
 
@@ -552,6 +555,7 @@ export default {
         subjects: [],
       };
       this.fileB64 = null;
+      this.fileType = "",
       this.fileName = "";
       const fileInput = document.getElementById("dropzone-file");
       if (fileInput) {
@@ -593,10 +597,12 @@ export default {
 
         const reader = new FileReader();
         reader.onload = (e) => {
+          
           svgDiv.classList.add("hidden");
           imagePreview.classList.remove("hidden");
           imagePreview.src = e.target.result;
-          this.fileB64 = e.target.result;
+          this.fileB64 = e.target.result.split(',')[1];
+          this.fileType = file.type
           this.fileName = file.name;
         };
         reader.readAsDataURL(file);

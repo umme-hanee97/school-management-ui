@@ -368,6 +368,7 @@ export default {
       dateOfBirth: "",
       subjectIds: [],
       fileB64: "",
+      fileType: "",
       fileName: "",
     });
 
@@ -466,9 +467,10 @@ export default {
           return;
         }
         formData.fileName = file.name;
+        formData.fileType = file.type;
         const reader = new FileReader();
         reader.onload = (e) => {
-          formData.fileB64 = e.target?.result || "";
+          formData.fileB64 = e.target?.result.split(",")[1] || "";
         };
         reader.readAsDataURL(file);
       }
@@ -505,6 +507,7 @@ export default {
       formData.dateOfBirth = "";
       formData.subjectIds = [];
       formData.fileB64 = "";
+      formData.fileType = "";
       formData.fileName = "";
       errors.name = "";
       errors.email = "";
@@ -513,6 +516,7 @@ export default {
 
     const removeImage = () => {
       formData.fileB64 = "";
+      formData.fileType = "";
       formData.fileName = "";
     };
 

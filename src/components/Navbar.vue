@@ -8,7 +8,7 @@
           </div>
           <div class="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8">
             <router-link to="/dashboard" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-700 hover:border-indigo-500 hover:text-indigo-700" active-class="border-indigo-500 text-indigo-700">Dashboard</router-link>
-            <router-link to="/student/list-student" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-700 hover:border-indigo-500 hover:text-indigo-700" active-class="border-indigo-500 text-indigo-700">Students</router-link>
+            <router-link to="/students" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-700 hover:border-indigo-500 hover:text-indigo-700" active-class="border-indigo-500 text-indigo-700">Students</router-link>
             <router-link to="/profile" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-700 hover:border-indigo-500 hover:text-indigo-700" active-class="border-indigo-500 text-indigo-700">Profile</router-link>
           </div>
         </div>

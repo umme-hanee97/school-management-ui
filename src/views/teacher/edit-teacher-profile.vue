@@ -182,7 +182,7 @@
                 class="relative w-full h-64 rounded-lg overflow-hidden border-2 border-gray-300 bg-gray-100"
               >
                 <img
-                  :src="formData.fileB64"
+                  :src="'data:'+formData.fileType+';base64,'+formData.fileB64"
                   :alt="formData.fileName"
                   class="w-full h-full object-cover"
                 />
@@ -370,6 +370,7 @@ export default {
       dateOfBirth: "",
       subjectIds: [],
       fileB64: "",
+      fileType: "",
       fileName: "",
     });
 
@@ -392,7 +393,6 @@ export default {
         const { data } = await profileService.getProfile(props.username);
         formData.email = data.email || "";
         const teacherData = await teacherService.getTeacherByEmail(data.email);
-        console.log(teacherData.data);
         // const submitBtn = document.getElementById("submitBtn");
         if (teacherData != null) {
           formData.id = teacherData.data.id;
@@ -403,6 +403,7 @@ export default {
           formData.dateOfBirth = teacherData.data.dateOfBirth;
           formData.subjectIds = teacherData.data.subjectIds;
           formData.fileB64 = teacherData.data.fileB64;
+          formData.fileType = teacherData.data.fileType;
           formData.fileName = teacherData.data.fileName;
           // submitBtn.innerText = this.isLoading ? "Updating..." : "Update Teacher" ;
         }
@@ -490,10 +491,11 @@ export default {
     const handleFileUpload = (event) => {
       const file = event.target.files?.[0];
       if (file) {
+        formData.fileType = file.type;
         formData.fileName = file.name;
         const reader = new FileReader();
         reader.onload = (e) => {
-          formData.fileB64 = e.target?.result || "";
+          formData.fileB64 = e.target?.result.split(",")[1] || "";
         };
         reader.readAsDataURL(file);
       }
@@ -509,8 +511,6 @@ export default {
         const response = await teacherService.editTeacherProfile(formData);
         // Simulate API call to save teacher data
         await new Promise((resolve) => setTimeout(resolve, 2000));
-        console.log("Teacher Data:", response);
-        console.log("Profile Picture (Base64):", formData.fileB64);
 
         if (response.status === 200) {
           // Show success message
@@ -541,6 +541,7 @@ export default {
       formData.dateOfBirth = "";
       formData.subjectIds = [];
       formData.fileB64 = "";
+      formData.fileType = "";
       formData.fileName = "";
       errors.name = "";
       errors.email = "";

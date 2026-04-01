@@ -249,7 +249,7 @@
                   <span class="font-semibold">Click to upload</span> or drag and
                   drop
                 </p>
-                <p class="text-xs text-gray-500">PNG, JPG, GIF (MAX. 5MB)</p>
+                <p class="text-xs text-gray-500">PNG, JPG, GIF (MAX. 1MB)</p>
               </div>
               <div class="flex flex-col items-center justify-center w-full">
                 <img

@@ -120,7 +120,8 @@ export default {
           dashboardService.getRecentStudents({ limit: 5 }).catch(() => ({ data: [] })),
           dashboardService.getUpcomingEvents({ limit: 5 }).catch(() => ({ data: [] })),
         ]);
-
+        console.log(statsRes);
+        
         // Process stats
         const statsData = statsRes.data;
         this.stats = {
@@ -169,9 +170,9 @@ export default {
         { id: 2, title: 'Midterm Exams', date: 'Mar 20' },
       ];
 
-      if (this.stats.students === 0) {
-        this.stats = { students: 1240, teachers: 58, classes: 32 };
-      }
+      // if (this.stats.students === 0) {
+      //   this.stats = { students: 1240, teachers: 58, classes: 32 };
+      // }
     },
 
     async loadProfile () {

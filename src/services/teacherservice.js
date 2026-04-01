@@ -32,6 +32,10 @@ export const teacherService = {
     return api.post('/teachers', teacherData);
   },
 
+  editTeacherProfile(teacherData) {
+    return api.post('/teachers/editTeacherProfile', teacherData);
+  },
+
   /**
    * Update teacher
    * @param {number|string} teacherId

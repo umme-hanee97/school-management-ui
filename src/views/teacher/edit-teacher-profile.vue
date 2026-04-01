@@ -263,7 +263,7 @@
                     >
                     or drag and drop
                   </p>
-                  <p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+                  <p class="text-xs text-gray-500">PNG, JPG, GIF up to 1MB</p>
                 </div>
               </label>
             </div>
@@ -506,7 +506,7 @@ export default {
 
       isLoading.value = true;
       try {
-        const response = await teacherService.createTeacher(formData);
+        const response = await teacherService.editTeacherProfile(formData);
         // Simulate API call to save teacher data
         await new Promise((resolve) => setTimeout(resolve, 2000));
         console.log("Teacher Data:", response);

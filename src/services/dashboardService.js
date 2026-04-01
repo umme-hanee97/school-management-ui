@@ -6,7 +6,7 @@ export const dashboardService = {
    * @returns {Promise}
    */
   getStats() {
-    return api.get('/dashboard/stats');
+    return api.get('/dashboard/countStats');
   },
 
   /**

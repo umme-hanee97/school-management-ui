@@ -45,11 +45,10 @@
             </label>
             <input
               id="email"
-              :value="formData.email"
+              v-model="formData.email"
               type="email"
               placeholder="Enter teacher's email address"
               required
-              readonly
               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
             />
             <p v-if="errors.email" class="mt-1 text-sm text-red-600">
@@ -263,7 +262,7 @@
                     >
                     or drag and drop
                   </p>
-                  <p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+                  <p class="text-xs text-gray-500">PNG, JPG, GIF up to 1MB</p>
                 </div>
               </label>
             </div>
@@ -352,15 +351,14 @@
 <script>
 import lookupService from "@/services/lookupService";
 import teacherService from "@/services/teacherservice";
-import { profileService } from "@/services";
 import { reactive, ref, onMounted } from "vue";
-// import router from "@/router";
+import { useRouter } from "vue-router";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 
 export default {
-  props: {
-    username: { type: String, required: true },
-  },
-  setup(props) {
+  setup() {
+    const router = useRouter();
     const formData = reactive({
       id: "",
       name: "",
@@ -415,54 +413,58 @@ export default {
     };
 
     const validateForm = () => {
-      errors.name = "";
-      errors.email = "";
-      errors.phoneNumber = "";
-      errors.address = "";
-      errors.dateOfBirth = "";
-      errors.subject = "";
-
       if (!formData.name.trim()) {
-        errors.name = "Full name is required";
+        toast.error("Full name is required");
+        return false;
       }
 
       if (!formData.email.trim()) {
-        errors.email = "Email address is required";
+        toast.error("Email address is required");
+        return false;
       } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-        errors.email = "Please enter a valid email address";
+        toast.error("Please enter a valid email address");
+        return false;
       }
 
       if (!formData.phoneNumber.trim()) {
-        errors.phoneNumber = "Phone number is required";
+        toast.error("Phone number is required");
+        return false;
       } else if (!/^[0-9\-\+\s\(\)]{10,}$/.test(formData.phoneNumber)) {
-        errors.phoneNumber = "Please enter a valid phone number";
+        toast.error("Please enter a valid phone number");
+        return false;
       }
 
       if (!formData.address.trim()) {
-        errors.address = "Address is required";
+        toast.error("Address is required");
+        return false;
       }
 
       if (!formData.dateOfBirth) {
-        errors.dateOfBirth = "Date of birth is required";
+        toast.error("Date of birth is required");
+        return false;
       }
 
       if (formData.subjectIds.length === 0) {
-        errors.subject = "Please select at least one subject";
+        toast.error("Please select at least one subject");
+        return false;
       }
-
-      return (
-        !errors.name &&
-        !errors.email &&
-        !errors.phoneNumber &&
-        !errors.address &&
-        !errors.dateOfBirth &&
-        !errors.subject
-      );
+      return true;
     };
 
     const handleFileUpload = (event) => {
+      const fileInput = document.getElementById("profilePicture");
       const file = event.target.files?.[0];
       if (file) {
+        if (file.size > 1 * 1024 * 1024) {
+          toast.error("File size must be less than 1MB");
+          fileInput.value = "";
+          return;
+        }
+        if (!file.type.startsWith("image/")) {
+          toast.error("Please select an image file");
+          fileInput.value = "";
+          return;
+        }
         formData.fileName = file.name;
         const reader = new FileReader();
         reader.onload = (e) => {
@@ -480,27 +482,16 @@ export default {
       isLoading.value = true;
       try {
         const response = await teacherService.createTeacher(formData);
-        // Simulate API call to save teacher data
         await new Promise((resolve) => setTimeout(resolve, 2000));
-        console.log("Teacher Data:", response);
-        console.log("Profile Picture (Base64):", formData.fileB64);
-
         if (response.status === 200) {
-          // Show success message
-          successMessage.value = "Teacher added successfully!";
-
-          // Reset form after submission
+          toast.value = "Teacher added successfully!";
           resetForm();
-
-          // Clear success message after 3 seconds
           setTimeout(() => {
-            this.$router.push("/dashboard");
-            successMessage.value = "";
-          }, 2000);
+            router.push("/dashboard");
+          }, 1500);
         }
       } catch (error) {
-        console.error("Error saving teacher data:", error);
-        successMessage.value = "Error adding teacher. Please try again.";
+        toast.error(error.message || "Failed to create teacher");
       } finally {
         isLoading.value = false;
       }

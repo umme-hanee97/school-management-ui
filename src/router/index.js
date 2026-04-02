@@ -15,6 +15,7 @@ const routes = [
   { path: '/dashboard/:username?', name: 'Dashboard', props: true, component: () => import('@/views/dashboard.vue'), meta: { requiresAuth: true } }
   , { path: '/profile/:username?', name: 'Profile', component: () => import('@/views/profile.vue'), meta: { requiresAuth: true } }
   , { path: '/profile/edit/:username?', name: 'ProfileEdit', props: true, component: () => import('@/views/profile-edit.vue'), meta: { requiresAuth: true } }
+  , { path: '/profile/change-password/:username?', name: 'ChangePassword', props: true, component: () => import('@/views/change-password.vue'), meta: { requiresAuth: true } }
   , { path: '/edit-student-profile/:username?', name: 'EditStudentProfile', props: true, component: () => import('@/views/student/edit-student-profile.vue'), meta: { requiresAuth: true } }
   , { path: '/edit-teacher-profile/:username?', name: 'EditTeacherProfile', props: true, component: () => import('@/views/teacher/edit-teacher-profile.vue'), meta: { requiresAuth: true } },
   { path: '/students', name: 'ListStudents', component: ListStudent, meta: { requiresAuth: true } },

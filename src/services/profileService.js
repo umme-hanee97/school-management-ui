@@ -52,10 +52,11 @@ export const profileService = {
    * @param {string} newPassword
    * @returns {Promise}
    */
-  changePassword(currentPassword, newPassword) {
-    return api.post('/profile/change-password', {
+  changePassword(name, currentPassword, newPassword) {
+    return api.post('/users/change-password', {
+      name,
       currentPassword,
-      newPassword,
+      newPassword
     });
   },
 

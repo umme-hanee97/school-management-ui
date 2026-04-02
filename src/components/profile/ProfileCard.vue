@@ -26,9 +26,12 @@
         class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700"
         >Edit Profile</router-link
       >
-      <button class="px-4 py-2 border rounded text-gray-700 hover:bg-gray-50">
+      <router-link
+        :to="changePasswordRoute"
+        class="px-4 py-2 border rounded text-gray-700 hover:bg-gray-50"
+      >
         Change Password
-      </button>
+      </router-link>
     </div>
   </div>
 </template>
@@ -109,6 +112,13 @@ export default {
       }
       return {
         name: "ProfileEdit",
+        params: { username: this.profileUsername },
+      };
+    },
+
+    changePasswordRoute() {
+      return {
+        name: "ChangePassword",
         params: { username: this.profileUsername },
       };
     },

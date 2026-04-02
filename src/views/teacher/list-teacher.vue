@@ -1,5 +1,6 @@
 <template>
   <div class="p-6">
+    <TeacherModal :show="showTeacherModal" :teacher="selectedTeacher" @close="showTeacherModal = false" />
     <header class="mb-6">
       <div class="flex items-center justify-between">
         <div>
@@ -58,38 +59,44 @@
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-200">
-            <tr v-for="student in filteredTeachers" :key="student.id" class="hover:bg-gray-50">
-              <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ student.name }}</td>
-              <td class="px-6 py-4 text-sm text-gray-600">{{ student.email }}</td>
-              <td class="px-6 py-4 text-sm text-gray-600">{{ student.phoneNumber || "—" }}</td>
-              <td class="px-6 py-4 text-sm text-gray-600">{{ student.address || "—" }}</td>
+            <tr v-for="teacher in filteredTeachers" :key="teacher.id" class="hover:bg-gray-50">
+              <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ teacher.name }}</td>
+              <td class="px-6 py-4 text-sm text-gray-600">{{ teacher.email }}</td>
+              <td class="px-6 py-4 text-sm text-gray-600">{{ teacher.phoneNumber || "—" }}</td>
+              <td class="px-6 py-4 text-sm text-gray-600">{{ teacher.address || "—" }}</td>
               <td class="px-6 py-4 text-sm">
                 <span
                   :class="[
                     'px-2 py-1 text-xs font-semibold rounded-full',
                     {
-                      'bg-green-100 text-green-800': student.status === 'Active',
-                      'bg-yellow-100 text-yellow-800': student.status === 'Pending',
-                      'bg-red-100 text-red-800': student.status === 'Inactive',
+                      'bg-green-100 text-green-800': teacher.status === 'Active',
+                      'bg-yellow-100 text-yellow-800': teacher.status === 'Pending',
+                      'bg-red-100 text-red-800': teacher.status === 'Inactive',
                     },
                   ]"
                 >
-                  {{ student.status || "Active" }}
+                  {{ teacher.status || "Active" }}
                 </span>
               </td>
               <td class="px-6 py-4 text-sm space-x-2">
+                <button
+                  @click="openTeacherModal(teacher)"
+                  class="text-blue-600 hover:text-blue-700 font-medium"
+                >
+                  View
+                </button>
                 <router-link
-                  :to="`/teachers/edit/${student.id}`"
+                  :to="`/teachers/edit/${teacher.id}`"
                   class="text-indigo-600 hover:text-indigo-700 font-medium"
                 >
                   Edit
                 </router-link>
                 <button
-                  @click="deleteStudent(student.id)"
-                  :disabled="deletingId === student.id"
+                  @click="deleteStudent(teacher.id)"
+                  :disabled="deletingId === teacher.id"
                   class="text-red-600 hover:text-red-700 font-medium disabled:opacity-50"
                 >
-                  {{ deletingId === student.id ? "Deleting..." : "Delete" }}
+                  {{ deletingId === teacher.id ? "Deleting..." : "Delete" }}
                 </button>
               </td>
             </tr>
@@ -116,12 +123,15 @@
   </div>
 </template>
 
+
 <script>
 import { handleApiError } from "@/services";
 import teacherService from "@/services/teacherservice";
+import TeacherModal from '@/components/teacher/TeacherModal.vue';
 
 export default {
   name: "ListTeacherView",
+  components: { TeacherModal },
   data() {
     return {
       teachers: [],
@@ -131,6 +141,8 @@ export default {
       deletingId: null,
       error: "",
       successMessage: "",
+      showTeacherModal: false,
+      selectedTeacher: null,
     };
   },
   computed: {
@@ -138,7 +150,6 @@ export default {
       if (!this.searchQuery.trim()) {
         return this.teachers;
       }
-
       const query = this.searchQuery.toLowerCase();
       return this.teachers.filter(teacher => {
         return (
@@ -155,13 +166,11 @@ export default {
     async loadTeachers() {
       this.isLoading = true;
       this.error = "";
-
       try {
         const { data } = await teacherService.getTeachers({
           page: 1,
           pageSize: 100,
         });
-
         this.teachers = Array.isArray(data) ? data : data.teachers || [];
       } catch (error) {
         const errorInfo = handleApiError(error);
@@ -171,14 +180,15 @@ export default {
         this.isLoading = false;
       }
     },
-
+    openTeacherModal(teacher) {
+      this.selectedTeacher = teacher;
+      this.showTeacherModal = true;
+    },
     async deleteStudent(teacherId) {
       if (!confirm("Are you sure you want to delete this teacher?")) {
         return;
       }
-
       this.deletingId = teacherId;
-
       try {
         await teacherService.deleteStudent(teacherId);
         this.teachers = this.teachers.filter(s => s.id !== teacherId);
@@ -193,7 +203,6 @@ export default {
         this.deletingId = null;
       }
     },
-
     async refreshTeachers() {
       await this.loadTeachers();
     },

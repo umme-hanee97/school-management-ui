@@ -1,5 +1,6 @@
 <template>
   <div class="p-6">
+    <StudentModal :show="showStudentModal" :student="selectedStudent" @close="showStudentModal = false" />
     <header class="mb-6">
       <div class="flex items-center justify-between">
         <div>
@@ -78,6 +79,12 @@
                 </span>
               </td>
               <td class="px-6 py-4 text-sm space-x-2">
+                <button
+                  @click="openStudentModal(student)"
+                  class="text-blue-600 hover:text-blue-700 font-medium"
+                >
+                  View
+                </button>
                 <router-link
                   :to="`/students/edit/${student.id}`"
                   class="text-indigo-600 hover:text-indigo-700 font-medium"
@@ -116,11 +123,14 @@
   </div>
 </template>
 
+
 <script>
 import { studentService, handleApiError } from "@/services";
+import StudentModal from '@/components/student/StudentModal.vue';
 
 export default {
   name: "ListStudentView",
+  components: { StudentModal },
   data() {
     return {
       students: [],
@@ -130,6 +140,8 @@ export default {
       deletingId: null,
       error: "",
       successMessage: "",
+      showStudentModal: false,
+      selectedStudent: null,
     };
   },
   computed: {
@@ -137,7 +149,6 @@ export default {
       if (!this.searchQuery.trim()) {
         return this.students;
       }
-
       const query = this.searchQuery.toLowerCase();
       return this.students.filter(student => {
         return (
@@ -154,13 +165,11 @@ export default {
     async loadStudents() {
       this.isLoading = true;
       this.error = "";
-
       try {
         const { data } = await studentService.getStudents({
           page: 1,
           pageSize: 100,
         });
-
         this.students = Array.isArray(data) ? data : data.students || [];
       } catch (error) {
         const errorInfo = handleApiError(error);
@@ -170,14 +179,15 @@ export default {
         this.isLoading = false;
       }
     },
-
+    openStudentModal(student) {
+      this.selectedStudent = student;
+      this.showStudentModal = true;
+    },
     async deleteStudent(studentId) {
       if (!confirm("Are you sure you want to delete this student?")) {
         return;
       }
-
       this.deletingId = studentId;
-
       try {
         await studentService.deleteStudent(studentId);
         this.students = this.students.filter(s => s.id !== studentId);
@@ -192,7 +202,6 @@ export default {
         this.deletingId = null;
       }
     },
-
     async refreshStudents() {
       await this.loadStudents();
     },

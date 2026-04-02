@@ -596,7 +596,7 @@ export default {
           svgDiv.classList.add("hidden");
           imagePreview.classList.remove("hidden");
           imagePreview.src = e.target.result;
-          this.fileB64 = e.target.result;
+          this.fileB64 = e.target.result.split(",")[1];
           this.fileType = file.type;
           this.fileName = file.name;
         };

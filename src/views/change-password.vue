@@ -119,6 +119,8 @@
 
 <script>
 import { handleApiError, profileService, validationService } from "@/services";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 
 export default {
   name: "ChangePasswordView",
@@ -189,21 +191,21 @@ export default {
       const errors = {};
 
       if (!this.form.password) {
-        errors.password = "Current password is required.";
+        toast.error("Current password is required.");
       }
 
       if (!this.form.newPassword) {
-        errors.newPassword = "New password is required.";
+        toast.error("New password is required.");
       } else if (!this.passwordStatus.isValid) {
-        errors.newPassword = this.passwordStatus.message;
+        toast.error(this.passwordStatus.message);
       } else if (this.form.newPassword === this.form.password) {
-        errors.newPassword = "New password must be different from your current password.";
+        toast.error("New password must be different from your current password.");
       }
 
       if (!this.form.confirmPassword) {
-        errors.confirmPassword = "Please confirm your new password.";
+        toast.error("Please confirm your new password.");
       } else if (this.form.newPassword !== this.form.confirmPassword) {
-        errors.confirmPassword = "Passwords do not match.";
+        toast.error("Passwords do not match.");
       }
 
       this.errors = errors;
@@ -231,18 +233,16 @@ export default {
           this.form.newPassword
         );
 
-        this.message = "Password updated successfully.";
-        this.messageClass = "text-green-600";
-        this.errors = {};
+        toast.success("Password updated successfully.");
         this.resetForm();
 
         setTimeout(() => {
           this.$router.push(this.profileRoute);
         }, 1200);
       } catch (error) {
+        console.log(error);
         const errorInfo = handleApiError(error);
-        this.message = errorInfo.message || "Failed to update password.";
-        this.messageClass = "text-red-600";
+        toast.error(errorInfo.message || "Failed to update password.");
       } finally {
         this.isSubmitting = false;
       }

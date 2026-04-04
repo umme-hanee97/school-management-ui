@@ -23,6 +23,7 @@ const routes = [
   { path: '/students/edit/:id?', name: 'EditStudent',props: true, component: EditStudent, meta: { requiresAuth: true } },
   { path: '/teachers', name: 'ListTeacher', component: ListTeacher, meta: { requiresAuth: true } },
   { path: '/teachers/add', name: 'AddTeacher', component: AddTeacher, meta: { requiresAuth: true } },
+  { path: '/teachers/edit/:id?', name: 'EditTeacher', props: true, component: () => import('@/views/teacher/edit-teacher.vue'), meta: { requiresAuth: true } },
   { path: '/classes', name: 'ListClass', component: () => import('@/views/classes.vue'), meta: { requiresAuth: true } }
 ];
 

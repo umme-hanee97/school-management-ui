@@ -8,7 +8,12 @@
       </div>
       <div class="mb-4">
         <label class="block mb-1 font-medium">Relationship</label>
-        <input v-model="contact.relationship" type="text" class="w-full border rounded px-3 py-2" required />
+        <select v-model="contact.relationship" class="w-full border rounded px-3 py-2" required>
+          <option value="" disabled>Select relationship</option>
+          <option v-for="rel in relationships" :key="rel.id" :value="rel.id">
+            {{ rel.relationship }}
+          </option>
+        </select>
       </div>
       <div class="mb-4">
         <label class="block mb-1 font-medium">Phone Number</label>
@@ -24,6 +29,7 @@
 </template>
 
 <script>
+import lookupService from '@/services/lookupService';
 export default {
   name: 'AddEmergencyContact',
   data() {
@@ -33,10 +39,25 @@ export default {
         relationship: '',
         phone: '',
         email: ''
-      }
+      },
+      relationships: []
     }
   },
+  mounted() {
+    // Load relationship types from lookupService
+    this.loadRelationships();
+  },
   methods: {
+    async loadRelationships() {
+      try {
+        // You may need to adjust the response structure depending on your API
+        const res = await lookupService.getRelationships();
+        // Example: if response is { data: [{ value: 'father', label: 'Father' }, ...] }
+        this.relationships = res.data;
+      } catch (e) {
+        this.relationships = [];
+      }
+    },
     submitForm() {
       // TODO: Integrate with backend or service layer
       alert('Emergency contact added!');

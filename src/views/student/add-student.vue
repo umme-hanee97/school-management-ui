@@ -287,20 +287,7 @@
       </form>
     </div>
 
-    <!-- Floating Add Emergency Contact Button -->
-    <router-link
-      to="/students/add-emergency-contact"
-      class="fixed bottom-8 right-8 z-50"
-      title="Add Emergency Contact"
-    >
-      <button
-        type="button"
-        class="flex items-center justify-center w-16 h-16 bg-red-600 hover:bg-red-700 text-white rounded-full shadow-lg text-3xl transition duration-200 focus:outline-none"
-        style="box-shadow: 0 4px 16px rgba(0,0,0,0.2);"
-      >
-        <span aria-hidden="true">+</span>
-      </button>
-    </router-link>
+    
   </div>
 </template>
 

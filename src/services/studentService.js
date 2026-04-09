@@ -56,6 +56,18 @@ export const studentService = {
     return api.delete(`/students/${studentId}`);
   },
 
+  addEmergencyContact(contactData) {
+    return api.post(`/students/addEmergencyContact`, contactData);
+  },
+
+  deleteEmergencyContact(studentId, contactId) {
+    return api.delete(`/students/${studentId}/emergency-contacts/${contactId}`);
+  },
+
+  getEmergencyContacts(studentId) {
+    return api.get(`/students/${studentId}/emergency-contacts`);
+  },
+
   /**
    * Bulk operations
    */
@@ -67,15 +79,15 @@ export const studentService = {
     return api.post('/students/bulk-delete', { ids: studentIds });
   },
 
-  getClasses(){
+  getClasses() {
     return api.get('/lookup/classes');
   },
 
-  getSections(){
+  getSections() {
     return api.get('/lookup/sections');
   },
 
-  getSubjects(){
+  getSubjects() {
     return api.get('/lookup/subjects');
   }
 };

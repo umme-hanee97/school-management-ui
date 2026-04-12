@@ -269,6 +269,33 @@
         </div>
 
         <!-- Submit Button -->
+        <!-- Emergency Contacts List -->
+        <div class="mt-8">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">Emergency Contacts</h2>
+          <div v-if="emergencyContacts.length > 0">
+            <table class="min-w-full bg-white border border-gray-200 rounded-lg">
+              <thead>
+                <tr>
+                  <th class="px-4 py-2 border-b text-left">Name</th>
+                  <th class="px-4 py-2 border-b text-left">Relation</th>
+                  <th class="px-4 py-2 border-b text-left">Phone Number</th>
+                  <th class="px-4 py-2 border-b text-left">Email</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="contact in emergencyContacts" :key="contact">
+                  <td class="px-4 py-2 border-b">{{ contact.name }}</td>
+                  <td class="px-4 py-2 border-b">{{ contact.relationshipName }}</td>
+                  <td class="px-4 py-2 border-b">{{ contact.phoneNumber }}</td>
+                  <td class="px-4 py-2 border-b">{{ contact.email }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div v-else class="text-gray-500 italic">No emergency contact added yet</div>
+        </div>
+
+        <!-- Submit Button -->
         <div class="flex gap-4 pt-6">
           <button
             type="submit"
@@ -319,6 +346,7 @@ export default {
       sections: [],
       teachers: [],
       subjects: [],
+      emergencyContacts: [],
       formData: {
         id: "",
         name: "",
@@ -358,7 +386,6 @@ export default {
         const imagePreview = document.getElementById("image-preview");
         const svgDiv = document.getElementById("dropzone");
         const submitBtn = document.getElementById("submitBtn");
-
         if (studentData != null) {
           this.formData.id = studentData.data.id;
           this.formData.name = studentData.data.name;
@@ -376,6 +403,7 @@ export default {
           this.fileB64 = studentData.data.fileB64;
           this.fileName = studentData.data.fileType;
           this.fileName = studentData.data.fileName;
+          this.emergencyContacts = studentData.data.emergencyContacts;
           svgDiv.classList.add("hidden");
           imagePreview.classList.remove("hidden");
           imagePreview.src = "data:"+studentData.data.fileType+";base64,"+ studentData.data.fileB64;

@@ -15,8 +15,8 @@
       <p><strong>Section:</strong> {{ student.sectionName }}</p>
       <p><strong>Roll Number:</strong> {{ student.rollNumber }}</p>
       <p><strong>Class Teacher:</strong> {{ student.teacherName }}</p>
-      <p><strong>Subjects:</strong><ol v-for="(subject) in student.subjectNames" :key="subject"><li>{{ subject }}</li></ol></p>
-      <p><strong>Emergency Contact:</strong> <ul><li v-for="contact in student.emergencyContacts" :key="contact">Name: {{ contact.name }},<br/> Phone: {{ contact.phoneNumber }}, <br/> Relationship: {{ contact.relationshipName }}, <br> Email: {{ contact.email }}</li></ul></p>
+      <strong>Subjects:</strong><ol v-for="(subject) in student.subjectNames" :key="subject"><li>{{ subject }}</li></ol>
+      <strong>Emergency Contact:</strong> <ol><li v-for="contact in student.emergencyContacts" :key="contact">Name: {{ contact.name }},<br/> Phone: {{ contact.phoneNumber }}, <br/> Relationship: {{ contact.relationshipName }}, <br> Email: {{ contact.email }}</li></ol>
       <!-- Add more fields as needed -->
     </div>
     <div v-else>

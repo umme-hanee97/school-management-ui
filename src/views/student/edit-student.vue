@@ -557,10 +557,10 @@ export default {
           fileName: this.fileName,
         };
 
-        const data = await studentService.editStudentProfile(payload);
+        const data = await studentService.updateStudent(this.formData.id, payload);
 
         if (data.status === 200) {
-          toast.success("Student created successfully!");
+          toast.success("Student updated successfully!");
           this.resetForm();
 
           setTimeout(() => {
@@ -569,7 +569,7 @@ export default {
         }
       } catch (error) {
         const errorInfo = handleApiError(error);
-        toast.error(errorInfo.message || "Failed to create student");
+        toast.error(errorInfo.message || "Failed to update student");
       } finally {
         this.isLoading = false;
       }

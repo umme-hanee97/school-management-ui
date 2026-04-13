@@ -504,16 +504,16 @@ export default {
       if (!validateForm()) {
         return;
       }
-debugger;
+
       isLoading.value = true;
       try {
-        const response = await teacherService.editTeacherProfile(formData);
+        const response = await teacherService.updateTeacher(this.formData.id, formData);
         // Simulate API call to save teacher data
         await new Promise((resolve) => setTimeout(resolve, 2000));
 
         if (response.status === 200) {
           // Show success message
-          toast.success("Teacher added successfully!");
+          toast.success("Teacher updated successfully!");
 
           // Reset form after submission
           resetForm();
@@ -525,7 +525,7 @@ debugger;
           }, 2000);
         }
       } catch (error) {
-        toast.error("Error adding teacher. Please try again.");
+        toast.error("Error updating teacher. Please try again.");
       } finally {
         isLoading.value = false;
       }

@@ -20,8 +20,8 @@
         <div v-if="expandedClass === classItem.id" class="ml-8 mt-2">
           <div v-for="section in classItem.sections" :key="section.id" class="bg-white p-3 rounded mb-2 border">
             <div class="flex justify-between">
-              <span class="font-medium">Section: {{ section.name }}</span>
-              <span class="text-sm text-gray-600">{{ section.data }}</span>
+              <span class="font-medium">Section: {{ section.sectionName }}</span>
+              <!-- <span class="text-sm text-gray-600">{{ section.data }}</span> -->
             </div>
           </div>
         </div>
@@ -32,7 +32,7 @@
 
 <script>
 import { ref, onMounted } from 'vue';
-import { getClassesWithSections } from '../services/classService';
+import { getClasses } from '../services/classService';
 
 export default {
   name: 'ClassesPage',
@@ -45,12 +45,10 @@ export default {
     const fetchClasses = async () => {
       loading.value = true;
       try {
-        const data = await getClassesWithSections();
-        classes.value = data;
-        console.log(data);
+        const classData = await getClasses();
+        classes.value = classData;
         
       } catch (e) {
-        // fallback or error handling
         classes.value = [];
       }
       loading.value = false;

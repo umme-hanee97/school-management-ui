@@ -9,8 +9,8 @@
           @click="toggleClass(classItem.id)"
         >
           <div>
-            <span class="font-semibold">{{ classItem.name }}</span>
-            <span class="ml-2 text-sm text-gray-600">({{ classItem.data }})</span>
+            <span class="font-semibold">{{ classItem.className }}</span>
+            <!-- <span class="ml-2 text-sm text-gray-600">({{ classItem.data }})</span> -->
           </div>
           <span>
             <svg v-if="expandedClass === classItem.id" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.293l3.71-4.06a.75.75 0 111.08 1.04l-4.25 4.65a.75.75 0 01-1.08 0l-4.25-4.65a.75.75 0 01.02-1.06z" clip-rule="evenodd" /></svg>
@@ -47,6 +47,8 @@ export default {
       try {
         const data = await getClassesWithSections();
         classes.value = data;
+        console.log(data);
+        
       } catch (e) {
         // fallback or error handling
         classes.value = [];

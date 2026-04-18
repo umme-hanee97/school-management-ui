@@ -22,6 +22,10 @@
             <div class="flex justify-between">
               <span class="font-medium">Section: {{ section.sectionName }}</span>
               <!-- <span class="text-sm text-gray-600">{{ section.data }}</span> -->
+               <router-link :to="`/students/${classItem.id}/${section.id}`" class="text-sm text-blue-500 bg-blue-100 px-3 py-1 rounded">Students</router-link>
+               <router-link :to="`/classes/${classItem.id}/sections/${section.id}/routine`" class="text-sm text-blue-500 ml-4 bg-orange-100 px-3 py-1 rounded">Routine</router-link>
+               <!-- <button class="text-sm text-blue-500 bg-blue-100 px-3 py-1 rounded">Students</button>
+               <button class="text-sm text-blue-500 ml-4 bg-orange-100 px-3 py-1 rounded">Routine</button> -->
             </div>
           </div>
         </div>

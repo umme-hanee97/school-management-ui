@@ -10,6 +10,10 @@ export const studentService = {
     return api.get('/students', { params });
   },
 
+  getStudentsByClassSection(classId, sectionId) {
+    return api.get(`/students/class/${classId}/section/${sectionId}`);
+  },
+
   /**
    * Get student by ID
    * @param {number|string} studentId

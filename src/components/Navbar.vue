@@ -8,7 +8,7 @@
           </div>
           <div class="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8">
             <router-link to="/dashboard" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-700 hover:border-indigo-500 hover:text-indigo-700" active-class="border-indigo-500 text-indigo-700">Dashboard</router-link>
-            <router-link to="/students" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-700 hover:border-indigo-500 hover:text-indigo-700" active-class="border-indigo-500 text-indigo-700">Students</router-link>
+            <router-link to="/allStudents" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-700 hover:border-indigo-500 hover:text-indigo-700" active-class="border-indigo-500 text-indigo-700">Students</router-link>
             <router-link to="/profile" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-700 hover:border-indigo-500 hover:text-indigo-700" active-class="border-indigo-500 text-indigo-700">Profile</router-link>
           </div>
         </div>
@@ -35,7 +35,7 @@
     <div v-show="open" class="sm:hidden">
       <div class="pt-2 pb-3 space-y-1">
         <router-link to="/dashboard" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-700 hover:bg-gray-50 hover:border-indigo-500" active-class="bg-indigo-50 border-indigo-500 text-indigo-700">Dashboard</router-link>
-        <router-link to="/student/list-student" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-700 hover:bg-gray-50 hover:border-indigo-500" active-class="bg-indigo-50 border-indigo-500 text-indigo-700">Students</router-link>
+        <router-link to="/allStudents" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-700 hover:bg-gray-50 hover:border-indigo-500" active-class="bg-indigo-50 border-indigo-500 text-indigo-700">Students</router-link>
         <router-link to="/profile" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-700 hover:bg-gray-50 hover:border-indigo-500" active-class="bg-indigo-50 border-indigo-500 text-indigo-700">Profile</router-link>
         <button @click="logout" class="w-full text-left block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-700 hover:bg-gray-50 hover:border-indigo-500">Sign out</button>
       </div>

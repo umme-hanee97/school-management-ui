@@ -182,7 +182,7 @@ import { studentService, handleApiError } from "@/services";
 import StudentModal from "@/components/student/StudentModal.vue";
 
 export default {
-  name: "ListStudentView",
+  name: "ListAllStudentsView",
   components: { StudentModal },
   data() {
     return {
@@ -229,23 +229,11 @@ export default {
       this.isLoading = true;
       this.error = "";
       try {
-        if (this.classId && this.sectionId) {
-          const { data } = await studentService.getStudentsByClassSection(
-            this.classId,
-            this.sectionId,
-            {
-              page: 1,
-              pageSize: 100,
-            }
-          );
-          this.students = Array.isArray(data) ? data : data.students || [];
-        } else {
           const { data } = await studentService.getStudents({
             page: 1,
             pageSize: 100,
           });
           this.students = Array.isArray(data) ? data : data.students || [];
-        }
       } catch (error) {
         const errorInfo = handleApiError(error);
         this.error = errorInfo.message || "Failed to load students";

@@ -10,6 +10,7 @@ import ListTeacher from '@/views/teacher/list-teacher.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 
 const routes = [
+    { path: '/routine', name: 'Routine', component: () => import('@/views/routine.vue'), meta: { requiresAuth: true } },
   { path: '/', name: 'Home', component: Login },
   { path: '/login', name: 'Login', component: Login },
   { path: '/register', name: 'Register', component: Register },

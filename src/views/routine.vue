@@ -13,7 +13,8 @@
       <tbody>
         <tr v-for="(day, i) in days" :key="day">
           <td class="border px-4 py-2 font-semibold">{{ day }}</td>
-          <td v-for="period in periods" :key="period" class="border px-4 py-2">
+          <span v-if="day == 'Friday' || day == 'Saturday'" class="bg-yellow-200 text-yellow-800 px-2 py-1 rounded">Weekend</span>
+          <td v-else v-for="period in periods" :key="period" class="border px-4 py-2">
             {{ routine[i][period - 1] || '-' }}
           </td>
         </tr>
@@ -28,8 +29,7 @@ export default {
   data() {
     return {
       days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-      periods: [1, 2, 3, 4, 5, 6, 7, 8], // Adjust as needed
-      // Mock data: Each sub-array is a day's periods
+      periods: [1, 2, 3, 4, 5, 6, 7, 8], 
       routine: [
         ['Math', 'English', 'Physics', 'Chemistry', 'Biology', 'PE', 'History', 'Art'],
         ['English', 'Math', 'Chemistry', 'Physics', 'PE', 'Biology', 'Art', 'History'],
@@ -37,8 +37,8 @@ export default {
         ['Chemistry', 'English', 'Math', 'Physics', 'Biology', 'PE', 'Art', 'History'],
         ['Biology', 'Math', 'English', 'Chemistry', 'Physics', 'PE', 'History', 'Art'],
         ['PE', 'Math', 'English', 'Physics', 'Chemistry', 'Biology', 'Art', 'History'],
-        ['Art', 'Math', 'English', 'Chemistry', 'Physics', 'PE', 'History', 'Biology'],
-      ],
+        ['Art', 'Math', 'English', 'Chemistry', 'Physics', 'PE', 'History', 'Biology']
+      ]
     };
   },
 };

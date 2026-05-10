@@ -10,7 +10,8 @@ import ListTeacher from '@/views/teacher/list-teacher.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 
 const routes = [
-  { path: '/routine', name: 'Routine', component: () => import('@/views/routine.vue'), meta: { requiresAuth: true } },
+  // { path: '/routine', name: 'Routine', component: () => import('@/views/routine.vue'), meta: { requiresAuth: true } },
+  { path: '/classes/:classId/sections/:sectionId/routine', name: 'Routine', props: true, component: () => import('@/views/routine.vue'), meta: { requiresAuth: true } },
   { path: '/routine/add-period', name: 'AddPeriod', component: () => import('@/views/routine/add-period.vue'), meta: { requiresAuth: true } },
   { path: '/', name: 'Home', component: Login },
   { path: '/login', name: 'Login', component: Login },
@@ -19,8 +20,8 @@ const routes = [
   , { path: '/profile/:username?', name: 'Profile', component: () => import('@/views/profile.vue'), meta: { requiresAuth: true } }
   , { path: '/profile/edit/:username?', name: 'ProfileEdit', props: true, component: () => import('@/views/profile-edit.vue'), meta: { requiresAuth: true } }
   , { path: '/profile/change-password/:username?', name: 'ChangePassword', props: true, component: () => import('@/views/change-password.vue'), meta: { requiresAuth: true } }
-  , { path: '/edit-student-profile/:username?', name: 'EditStudentProfile', props: true, component: () => import('@/views/student/edit-student-profile.vue'), meta: { requiresAuth: true } }
-  , { path: '/edit-teacher-profile/:username?', name: 'EditTeacherProfile', props: true, component: () => import('@/views/teacher/edit-teacher-profile.vue'), meta: { requiresAuth: true } },
+  , { path: '/edit-student-profile/:username?', name:'EditStudentProfile', props: true, component: () => import('@/views/student/edit-student-profile.vue'), meta: { requiresAuth: true } }
+  , { path: '/edit-teacher-profile/:username?', name:'EditTeacherProfile', props: true, component: () => import('@/views/teacher/edit-teacher-profile.vue'), meta: { requiresAuth: true } },
   { path: '/allStudents', name: 'ListAllStudents', component: ListAllStudent, meta: { requiresAuth: true } },
   { path: '/students/:classId?/:sectionId?', name: 'ListStudents', props: true, component: ListStudent, meta: { requiresAuth: true } },
   { path: '/students/add', name: 'AddStudent', component: AddStudent, meta: { requiresAuth: true } },

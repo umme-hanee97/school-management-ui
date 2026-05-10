@@ -1,6 +1,6 @@
 <template>
   <div class="p-6">
-    <h1 class="text-2xl font-bold mb-4">Class Routine</h1>
+    <h1 class="text-2xl font-bold mb-4">Class {{ classId }} Section {{ sectionId }} Routine</h1>
     <table class="min-w-full border border-gray-300">
       <thead>
         <tr>
@@ -26,8 +26,14 @@
 <script>
 export default {
   name: 'RoutinePage',
+  props: {
+    classId: { type: String, required: false },
+    sectionId: { type: String, required: false },
+  },
   data() {
     return {
+      // className: this.className,
+      // section: this.section,
       days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
       periods: [1, 2, 3, 4, 5, 6, 7, 8], 
       routine: [
